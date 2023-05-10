@@ -1,7 +1,8 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
-import           Data.Monoid (mappend)
 import           Hakyll
+import           Text.Pandoc.Extensions
+import           Text.Pandoc.Options
 
 
 --------------------------------------------------------------------------------
@@ -17,10 +18,10 @@ main = hakyllWith config $ do
 
     match (fromList ["about.rst", "contact.markdown"]) $ do
         route   $ setExtension "html"
-        compile $ pandocCompiler
+        compile $ pandocCompilerWith (defaultHakyllReaderOptions { readerExtensions = extensionsFromList [Ext_emoji] } ) defaultHakyllWriterOptions
             >>= loadAndApplyTemplate "templates/default.html" defaultContext
             >>= relativizeUrls
-    
+
     tags <- buildTags "posts/*" (fromCapture "tags/*.html")
 
     tagsRules tags $ \tag pattern -> do
