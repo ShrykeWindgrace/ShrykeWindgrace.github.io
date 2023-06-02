@@ -1,0 +1,32 @@
+
+Then, if there only two elements in the set, then there are $16$ possible games; one could see the $\ast$ operation as a binary boolean operation - this would allow us to enumerate them as follows (assuming that the set is $\{0,1\}$) :
+
+1. $x \ast y = 0$
+1. $x \ast y = 1$
+1. $x \ast y = x$
+1. $x \ast y = \bar x$
+1. $x \ast y = y$
+1. $x \ast y = \bar y$
+1. $x \ast y = x + y$
+1. $x \ast y = \bar x + y$
+1. $x \ast y = x + \bar y$
+1. $x \ast y = \bar x + \bar y$
+1. $x \ast y = x \cdot y$
+1. $x \ast y = \bar x \cdot y$
+1. $x \ast y = x \cdot \bar y$
+1. $x \ast y = \bar x \cdot \bar y$
+1. $x \ast y = x \oplus y$
+1. $x \ast y = \overline { x \oplus y}$
+
+where $\cdot$ is "multiplication" (boolean "and"), $+$ is "addition" (boolean "or"), $\bar{c}$ is negation of $c$, and $\oplus$ is a boolean "exlusive or" ("XOR").
+
+Having this representation in mind, we can eliminiate all options that are not cummutative, that leaves us with $8$ possibilities:
+
+1. $x \ast y = 0$
+1. $x \ast y = 1$
+1. $x \ast y = x + y$
+1. $x \ast y = \bar x + \bar y$
+1. $x \ast y = x \cdot y$
+1. $x \ast y = \bar x \cdot \bar y$
+1. $x \ast y = x \oplus y$
+1. $x \ast y = \overline { x \oplus y}$
