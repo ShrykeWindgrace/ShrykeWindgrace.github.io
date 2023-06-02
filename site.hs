@@ -18,31 +18,31 @@ main = hakyllWith config $ do
 
     match (fromList ["about.rst", "contact.markdown"]) $ do
         route   $ setExtension "html"
-        compile $ pandocCompilerWith (defaultHakyllReaderOptions { readerExtensions = extensionsFromList [Ext_emoji] } ) defaultHakyllWriterOptions
-            >>= loadAndApplyTemplate "templates/default.html" defaultContext
+        compile $ pandocCompilerWith localReaderOptions defaultHakyllWriterOptions
+            >>= loadAndApplyTemplate "templates/default.html" (defaultContext <> mathCtx)
             >>= relativizeUrls
 
     tags <- buildTags "posts/*" (fromCapture "tags/*.html")
 
-    tagsRules tags $ \tag pattern -> do
+    tagsRules tags $ \tag pattern_ -> do
         let title = "Posts tagged \"" ++ tag ++ "\""
         route idRoute
         compile $ do
-            posts <- recentFirst =<< loadAll pattern
+            posts <- recentFirst =<< loadAll pattern_
             let ctx = constField "title" title
                       `mappend` listField "posts" (postCtxWithTags tags) (return posts)
                       `mappend` defaultContext
 
             makeItem ""
                 >>= loadAndApplyTemplate "templates/tag.html" ctx
-                >>= loadAndApplyTemplate "templates/default.html" ctx
+                >>= loadAndApplyTemplate "templates/default.html" (ctx <> mathCtx)
                 >>= relativizeUrls
 
     match "posts/*" $ do
         route $ setExtension "html"
-        compile $ pandocCompiler
+        compile $ pandocCompilerWith localReaderOptions (defaultHakyllWriterOptions {writerHTMLMathMethod = MathJax "" })
             >>= loadAndApplyTemplate "templates/post.html"    (postCtxWithTags tags)
-            >>= loadAndApplyTemplate "templates/default.html" (postCtxWithTags tags)
+            >>= loadAndApplyTemplate "templates/default.html" (mathCtx <> postCtxWithTags tags)
             >>= relativizeUrls
 
     create ["archive.html"] $ do
@@ -56,7 +56,7 @@ main = hakyllWith config $ do
 
             makeItem ""
                 >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
-                >>= loadAndApplyTemplate "templates/default.html" archiveCtx
+                >>= loadAndApplyTemplate "templates/default.html" (archiveCtx <> mathCtx)
                 >>= relativizeUrls
 
 
@@ -71,7 +71,7 @@ main = hakyllWith config $ do
 
             getResourceBody
                 >>= applyAsTemplate indexCtx
-                >>= loadAndApplyTemplate "templates/default.html" indexCtx
+                >>= loadAndApplyTemplate "templates/default.html" (indexCtx <> mathCtx)
                 >>= relativizeUrls
 
     match "templates/*" $ compile templateCompiler
@@ -92,3 +92,20 @@ config :: Configuration
 config = defaultConfiguration
   { destinationDirectory = "docs"
   }
+--------------------------------------------------------------------------------
+
+-- based on http://qnikst.github.io/posts/2013-02-04-hakyll-latex.html
+-- and   on https://gisli.hamstur.is/2020/08/my-personal-hakyll-cheatsheet/#katex-to-render-latex-math
+mathCtx :: Context a
+mathCtx = field "mathjax" $ \item -> do
+    mathjax <- getMetadataField (itemIdentifier item) "mathjax"
+    pure $ case mathjax of
+        Just "off" -> ""
+        Just "false" -> ""
+        Nothing -> ""
+        _ -> "\n<script type=\"text/javascript\" src=\"http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>"
+
+localReaderOptions :: ReaderOptions
+localReaderOptions = let defExts = readerExtensions defaultHakyllReaderOptions in defaultHakyllReaderOptions {
+        readerExtensions = defExts <> extensionsFromList [Ext_emoji, Ext_tex_math_dollars, Ext_tex_math_double_backslash, Ext_latex_macros]
+    }
