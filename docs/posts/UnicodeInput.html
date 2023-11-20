@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>My Hakyll Blog - Unicode input, keyboards, and windows</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">My Hakyll Blog</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../contact.html">Contact</a>
+                <a href="../archive.html">Archive</a>
+            </div>
+        </div>
+
+        <div id="content">
+            <h1>Unicode input, keyboards, and windows</h1>
+
+            <div class="info">
+    Posted on November 20, 2023
+    
+        by me
+    
+</div>
+<div class="info">
+    
+    Tags: <a title="All pages tagged 'QMK'." href="../tags/QMK.html" rel="tag">QMK</a>, <a title="All pages tagged 'hardware'." href="../tags/hardware.html" rel="tag">hardware</a>, <a title="All pages tagged 'unicode'." href="../tags/unicode.html" rel="tag">unicode</a>, <a title="All pages tagged 'windows'." href="../tags/windows.html" rel="tag">windows</a>
+    
+</div>
+<h2 id="unicode-input-and-programmable-keyboards">Unicode input and programmable keyboards</h2>
+<p>One of selling points of programmable keyboards are <code>macros</code> - sequences of keytaps sent to the host machine triggered by a smaller number of taps on the keyboard.</p>
+<p>I took a Moonlander keyboard, running on a (subset of) QMK firmware, but most points apply to all QMK-based builds.</p>
+<p>I also prefer to use Oryx, a WYSIWYG configurator for ZSA’s keyboards.</p>
+<p>The goals of the exercise is to input French characters like <code>çéèêëîïôæœüûàù</code> without much trouble,
+preferrably with a single keystroke. The host machine is a Win10.</p>
+<p>Without further ado, here are the methods that I found.</p>
+<h3 id="alt-codes">Alt codes</h3>
+<p>There is an always-on functionality that would allow entering unicode with <code>Alt</code> and numpad: for example, switch to a <code>US</code> layout, hold <code>Alt</code> and hit <code>0,2,3,1</code> on numpad, you will get a <code>ç</code> character.
+This method, however, comes with a giant imitation - not all software handle these sequences correctly. MS Office suite has some issues, with no clear way to fix them. On top of that, these issues are <strong>very</strong> annoying.</p>
+<p>My personal beef is with Outlook. Start writing a new email in French. Input any such macro (e.g. <code>Alt+0231</code>), see <code>ç</code> appear - so far, so good. Now hit another key (e.g. <code>a</code>) - and voilà, another copy of <code>ç</code> appears instead!</p>
+<p>For words like <code>"généré"</code> (“generated”) the outcome is mangled beyond recognition.</p>
+<p>Also, this method is language-specific. And as you might have guessed, requires <code>NumLock on</code>.</p>
+<h3 id="alt-hex-codes">Alt Hex codes</h3>
+<ul>
+<li>this windows feature is hidden behind a registry flag</li>
+<li>if I am not mistaken, these codes follow <code>win1252</code>, not unicode.</li>
+<li>the macros are too long; hardcoding them in Oryx is even more tedious (and some codes do not fit Oryx limitations!)</li>
+</ul>
+<p>I did not try this approach.</p>
+<h3 id="altx">Alt+X</h3>
+<p>A rather limited set of software supports this method: enter the hex value of the character, hit <code>alt+x</code>, the code is replaced by the character. To my knowledge, only MS Office suite supports it; I quickly discarded this approach as non-consequential.</p>
+<h3 id="wincompose-approach">Wincompose approach</h3>
+<p>QMK documentation recommends this method. <code>Wincompose</code> is a third-party program that triggers on a <code>compose</code> key (default is <code>ralt</code>), and then listens on consequtive keypresses; if it sees a known sequence, it outputs a corresponding character. For example, in default setting, the sequence <code>ralt, `, E</code> would produce an <code>È</code>.</p>
+<p>The positive side is obvious:</p>
+<ul>
+<li>there is some logic in these sequences</li>
+<li>macros are shorter</li>
+<li>no more buggy input in Outlook!</li>
+</ul>
+<p>The drawbacks are quite obvious, too:</p>
+<ul>
+<li>this approach requires something running on the host machine</li>
+<li>Oryx adds artificial delays of <code>100</code>ms; I contacted ZSA support, they are not willing to add an option to reduce this delay.</li>
+</ul>
+<h3 id="remapper-on-the-host">Remapper on the host</h3>
+<p>This approach is similar to the previous one - run a remapper like <code>kanata</code>/<code>kmonad</code>/etc on the host machine, define layers and remappings, and since they are running on the host, you have a sure way to input unicode. I use this approach on machines that are not connected to a programmable keyboard.</p>
+<h3 id="us-international-layout-with-dead-keys">US International layout with dead keys</h3>
+<p>This approach works only if you are willing to limit youself to unicode characters present in this layout.</p>
+<p>Pros:</p>
+<ul>
+<li>nothing to run on the host system, just change the OS keyboard layout</li>
+<li>suddenly the unicode input from the keyboard works on linux machines, too (if they are running the same keyboard layout, of course)</li>
+</ul>
+<p>Cons:</p>
+<ul>
+<li>not everything is there; (e.g. <code>æ</code>), you will need other approaches for such characters. Admittedly, this is a rather rare thing to type in my daily life.</li>
+<li><code>"`^'~</code> all become dead keys, so you’ll need macros to input them as standalone characters, and some features of QMK will become unnecessarily complicated to use (like “autoshift”).</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>Unicode input is very much a problem, often overlooked because users are willing to skip on rare characters like <code>æ</code> or because their native OS keyboard layout cover their needs.</p>
+<p>Another point is that my use case is rather fringe - I want to input both pure English and French while using a single OS layout. I am not talking about entering cyrillic text, that would be an even more complex endeavor, I’ll stick with my <code>ЙЦУКЕН</code> OS layout for now.</p>
+<p>Personnally, the easiest solution for me is the <code>wincompose</code> one - it requires almost no setup on the host and macros are easy to hardcode in Oryx. QMK has them built in, if I am not mistaken.</p>
+<h3 id="references">References</h3>
+<p><a href="https://en.wikipedia.org/wiki/Unicode_input">Unicode input, wikipedia</a></p>
+<p><a href="https://en.wikipedia.org/wiki/Alt_code">Alt codes, wikipedia</a></p>
+<p><a href="https://support.microsoft.com/en-us/office/insert-ascii-or-unicode-latin-based-symbols-and-characters-d13f58d3-7bcb-44a7-a4d5-972ee12e50e0">MS on entering unicode</a></p>
+<p><a href="https://www.fileformat.info/tip/microsoft/enter_unicode.htm">Various flavors of alt code entering</a></p>
+<p><a href="https://configure.zsa.io">Oryx</a></p>
+<p><a href="https://docs.qmk.fm/#/feature_unicode">QMK documentation</a></p>
+
+        </div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>
