@@ -18,7 +18,7 @@ main = hakyllWith config $ do
 
     match (fromList ["about.rst", "contact.markdown"]) $ do
         route   $ setExtension "html"
-        compile $ pandocCompilerWith localReaderOptions defaultHakyllWriterOptions
+        compile $ pandocCompilerWith (defaultHakyllReaderOptions { readerExtensions = extensionsFromList [Ext_emoji] } ) (defaultHakyllWriterOptions { writerHTMLMathMethod = MathJax "" } )
             >>= loadAndApplyTemplate "templates/default.html" (defaultContext <> mathCtx)
             >>= relativizeUrls
 
