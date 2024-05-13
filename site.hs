@@ -2,8 +2,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 import           Hakyll
 import           Text.Pandoc.Extensions
+import           Text.Pandoc.Highlighting (Style, haddock, styleToCss)
 import           Text.Pandoc.Options
-
 
 --------------------------------------------------------------------------------
 main :: IO ()
@@ -11,6 +11,11 @@ main = hakyllWith config $ do
     match "images/*" $ do
         route   idRoute
         compile copyFileCompiler
+
+    create ["css/syntax.css"] $ do
+        route idRoute
+        compile $ do
+            makeItem $ styleToCss pandocCodeStyle
 
     match "css/*" $ do
         route   idRoute
@@ -40,7 +45,7 @@ main = hakyllWith config $ do
 
     match "posts/*" $ do
         route $ setExtension "html"
-        compile $ pandocCompilerWith localReaderOptions (defaultHakyllWriterOptions {writerHTMLMathMethod = MathJax "" })
+        compile $ pandocCompilerWith localReaderOptions (defaultHakyllWriterOptions {writerHTMLMathMethod = MathJax "", writerHighlightStyle = Just pandocCodeStyle })
             >>= loadAndApplyTemplate "templates/post.html"    (postCtxWithTags tags)
             >>= loadAndApplyTemplate "templates/default.html" (mathCtx <> postCtxWithTags tags)
             >>= relativizeUrls
@@ -109,3 +114,11 @@ localReaderOptions :: ReaderOptions
 localReaderOptions = let defExts = readerExtensions defaultHakyllReaderOptions in defaultHakyllReaderOptions {
         readerExtensions = defExts <> extensionsFromList [Ext_emoji, Ext_tex_math_dollars, Ext_tex_math_double_backslash, Ext_latex_macros]
     }
+
+
+----------------
+
+-- based on https://rebeccaskinner.net/posts/2021-01-31-hakyll-syntax-highlighting.html
+
+pandocCodeStyle :: Style
+pandocCodeStyle = haddock
