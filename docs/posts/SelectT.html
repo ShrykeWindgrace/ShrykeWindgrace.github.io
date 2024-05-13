@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>My Hakyll Blog - SelectT monad transformer and its laws</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" /><link rel="stylesheet" href="../css/syntax.css" />
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">My Hakyll Blog</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../contact.html">Contact</a>
+                <a href="../archive.html">Archive</a>
+            </div>
+        </div>
+
+        <div id="content">
+            <h1>SelectT monad transformer and its laws</h1>
+
+            <div class="info">
+    Posted on May 13, 2024
+    
+        by me
+    
+</div>
+<div class="info">
+    
+    Tags: <a title="All pages tagged 'Haskell'." href="../tags/Haskell.html" rel="tag">Haskell</a>
+    
+</div>
+<h2 id="motivation">Motivation</h2>
+<p>Quite some time ago I learned about positive and negative argument positions and their relation with <code>Functor</code> instances.
+As an exercise I tried writing a <code>Functor</code> instance for the following type:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">ARA</span> r a <span class="ot">=</span> <span class="dt">ARA</span> {<span class="ot">runAra ::</span> (a <span class="ot">-&gt;</span> r) <span class="ot">-&gt;</span> a}</span></code></pre></div>
+<p>While this instance and the corresponding laws are rather straightforward, <code>Applicative</code> and <code>Monad</code> instances proved to be much more complicated.
+After a bit of googling, I found that this type has a name and can even made into a monad tranformer; moreover, it exists in <a href="https://www.stackage.org/haddock/lts-22.21/transformers-0.6.1.0/Control-Monad-Trans-Select.html#t:SelectT">transformers</a></p>
+<h2 id="generic-definition">Generic definition</h2>
+<p>Up to order of declarations, a more generic datatype becomes</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">newtype</span> <span class="dt">SelectT</span> m r a <span class="ot">=</span> <span class="dt">SelectT</span> {<span class="ot">runSelectT ::</span> (a <span class="ot">-&gt;</span> m r) <span class="ot">-&gt;</span> m a}</span></code></pre></div>
+<p>Perhaps unsurprisingly, when I introduced additional type parameter <code>m</code>, the <code>Monad</code> instance became <em>easier</em> to write.
+Simply because the nimber of possible operations to apply got severely restricted.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Functor</span> m <span class="ot">=&gt;</span> <span class="dt">Functor</span> (<span class="dt">SelectT</span> m r) <span class="kw">where</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ot">    fmap ::</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> <span class="dt">SelectT</span> m r a <span class="ot">-&gt;</span> <span class="dt">SelectT</span> m r b</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fmap</span> ab (<span class="dt">SelectT</span> op) <span class="ot">=</span> <span class="dt">SelectT</span> <span class="op">$</span> \bmr <span class="ot">-&gt;</span> <span class="kw">do</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        ab <span class="op">&lt;$&gt;</span> op (bmr <span class="op">.</span> ab)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> <span class="dt">Applicative</span> (<span class="dt">SelectT</span> m r) <span class="kw">where</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ot">    pure ::</span> a <span class="ot">-&gt;</span> <span class="dt">SelectT</span> m r a</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pure</span> x <span class="ot">=</span> <span class="dt">SelectT</span> <span class="op">$</span> \_ <span class="ot">-&gt;</span> <span class="fu">pure</span> x</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ot">    liftA2 ::</span> (a <span class="ot">-&gt;</span> b <span class="ot">-&gt;</span> c) <span class="ot">-&gt;</span> <span class="dt">SelectT</span> m r a <span class="ot">-&gt;</span> <span class="dt">SelectT</span> m r b <span class="ot">-&gt;</span> <span class="dt">SelectT</span> m r c</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    liftA2 <span class="ot">=</span> liftM2</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">instance</span> <span class="dt">Monad</span> m <span class="ot">=&gt;</span> <span class="dt">Monad</span> (<span class="dt">SelectT</span> m r) <span class="kw">where</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ot">    (&gt;&gt;=) ::</span> <span class="dt">SelectT</span> m r a <span class="ot">-&gt;</span> (a <span class="ot">-&gt;</span> <span class="dt">SelectT</span> m r b) <span class="ot">-&gt;</span> <span class="dt">SelectT</span> m r b</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">SelectT</span> op <span class="op">&gt;&gt;=</span> f <span class="ot">=</span> <span class="dt">SelectT</span> <span class="op">$</span> \bmr <span class="ot">-&gt;</span> <span class="kw">do</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> pick x <span class="ot">=</span> runSelectT (f x) bmr</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        y <span class="ot">&lt;-</span> op (pick <span class="op">&gt;=&gt;</span> bmr)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        pick y</span></code></pre></div>
+<h2 id="laws-and-proofs">Laws and proofs</h2>
+<h3 id="functor-laws">Functor laws</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fmap</span><span class="ot"> ::</span> <span class="dt">Functor</span> m <span class="ot">=&gt;</span> (a <span class="ot">-&gt;</span> b) <span class="ot">-&gt;</span> <span class="dt">SelectT</span> m r a <span class="ot">-&gt;</span> <span class="dt">SelectT</span> m r b</span></code></pre></div>
+<h4 id="first-law">First law</h4>
+<p>As I said before, it is rather straightforward. In pseudo-haskell we can write by definition</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fmap</span> <span class="fu">id</span> (<span class="dt">SelectT</span> op) <span class="ot">=</span> <span class="dt">SelectT</span> <span class="op">$</span> \amr <span class="ot">-&gt;</span> <span class="fu">id</span> <span class="op">&lt;$&gt;</span> op (amr <span class="op">.</span> <span class="fu">id</span>)</span></code></pre></div>
+<p>which, by applying functor laws to inner <code>Functor m</code> and recalling that <code>amr . id = amr</code>, we rewrite as</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fmap</span> <span class="fu">id</span> (<span class="dt">SelectT</span> op) <span class="ot">=</span> <span class="dt">SelectT</span> <span class="op">$</span> \amr <span class="ot">-&gt;</span> op amr <span class="ot">=</span> <span class="dt">SelectT</span> op</span></code></pre></div>
+<p>And the first law is proven.</p>
+<h4 id="second-law">Second law</h4>
+<p>Just a little more difficult, but easy nonetheless. We use the second for the inner functor <code>m</code> and the associativity of function commposition.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fmap</span> bc ( <span class="fu">fmap</span> ab (<span class="dt">SelectT</span> op)) <span class="ot">=</span> <span class="fu">fmap</span> bc ( <span class="dt">SelectT</span> <span class="op">$</span> \bmr <span class="ot">-&gt;</span> ab <span class="op">&lt;$&gt;</span> op (bmr <span class="op">.</span> ab) )</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> <span class="dt">SelectT</span> <span class="op">$</span> \cmr <span class="ot">-&gt;</span> bc <span class="op">&lt;$&gt;</span> (\z <span class="ot">-&gt;</span> ab <span class="op">&lt;$&gt;</span> op (z <span class="op">.</span> ab)) (cmr <span class="op">.</span> bc)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> <span class="dt">SelectT</span> <span class="op">$</span> \cmr <span class="ot">-&gt;</span> bc <span class="op">&lt;$&gt;</span> ( ab <span class="op">&lt;$&gt;</span> op ((cmr <span class="op">.</span> bc) <span class="op">.</span> ab))</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> <span class="dt">SelectT</span> <span class="op">$</span> \cmr <span class="ot">-&gt;</span> (bc <span class="op">.</span> ab) <span class="op">&lt;$&gt;</span> op (cmr <span class="op">.</span> (bc <span class="op">.</span> ab))</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="ot">=</span> <span class="fu">fmap</span> (bc <span class="op">.</span> ab) (<span class="dt">SelectT</span> op)</span></code></pre></div>
+<p>and the second law is proven, too.</p>
+<h3 id="monad-laws">Monad laws</h3>
+<h4 id="left-identity">Left identity</h4>
+<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pure</span> a <span class="op">&gt;&gt;=</span> k <span class="ot">=</span> k a</span></code></pre></div>
+<p>In our case this becomes (recall that <code>pure x = SelectT $ \_ -&gt; pure x</code>)</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pure</span> a <span class="op">&gt;&gt;=</span> f <span class="ot">=</span> <span class="dt">SelectT</span> <span class="op">$</span> \bmr <span class="ot">-&gt;</span> <span class="kw">do</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> pick x <span class="ot">=</span> runSelectT (f x) bmr</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        y <span class="ot">&lt;-</span> (\_ <span class="ot">-&gt;</span> <span class="fu">pure</span> a) (pick <span class="op">&gt;=&gt;</span> bmr)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>        pick y</span></code></pre></div>
+<p>or</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pure</span> a <span class="op">&gt;&gt;=</span> f <span class="ot">=</span> <span class="dt">SelectT</span> <span class="op">$</span> \bmr <span class="ot">-&gt;</span> <span class="kw">do</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> pick x <span class="ot">=</span> runSelectT (f x) bmr</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>        y <span class="ot">&lt;-</span> <span class="fu">pure</span> a</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>        pick y</span></code></pre></div>
+<p>by left identity law for <code>m</code> we get</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pure</span> a <span class="op">&gt;&gt;=</span> f <span class="ot">=</span> <span class="dt">SelectT</span> <span class="op">$</span> \bmr <span class="ot">-&gt;</span> <span class="kw">do</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> pick x <span class="ot">=</span> runSelectT (f x) bmr</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>        pick a</span></code></pre></div>
+<p>and then</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pure</span> a <span class="op">&gt;&gt;=</span> f <span class="ot">=</span> <span class="dt">SelectT</span> <span class="op">$</span> \bmr <span class="ot">-&gt;</span> <span class="kw">do</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>        runSelectT (f a) bmr</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pure</span> a <span class="op">&gt;&gt;=</span> f <span class="ot">=</span> <span class="dt">SelectT</span> <span class="op">$</span> runSelectT (f a) <span class="ot">=</span> f a</span></code></pre></div>
+<h4 id="right-identity">Right identity</h4>
+<div class="sourceCode" id="cb16"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>m <span class="op">&gt;&gt;=</span> <span class="fu">pure</span> <span class="ot">=</span> m</span></code></pre></div>
+<p>We write it as</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="dt">SelectT</span> op <span class="op">&gt;&gt;=</span> <span class="fu">pure</span> <span class="ot">=</span> <span class="dt">SelectT</span> <span class="op">$</span> \bmr <span class="ot">-&gt;</span> <span class="kw">do</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> pick x <span class="ot">=</span> runSelectT (<span class="fu">pure</span> x) bmr</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> op (pick <span class="op">&gt;=&gt;</span> bmr)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    pick y</span></code></pre></div>
+<p>We plug in the definition of <code>pure</code>
+<code>runSelectT (pure x) bmr = runSelectT (SelectT $ \_ -&gt; pure x) bmr = pure x</code>
+to obtain</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="dt">SelectT</span> op <span class="op">&gt;&gt;=</span> <span class="fu">pure</span> <span class="ot">=</span> <span class="dt">SelectT</span> <span class="op">$</span> \bmr <span class="ot">-&gt;</span> <span class="kw">do</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> pick x <span class="ot">=</span> <span class="fu">pure</span> x</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> op (pick <span class="op">&gt;=&gt;</span> bmr)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    pick y</span></code></pre></div>
+<p>or</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="dt">SelectT</span> op <span class="op">&gt;&gt;=</span> <span class="fu">pure</span> <span class="ot">=</span> <span class="dt">SelectT</span> <span class="op">$</span> \bmr <span class="ot">-&gt;</span> <span class="kw">do</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> op (<span class="fu">pure</span> <span class="op">&gt;=&gt;</span> bmr)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pure</span> y</span></code></pre></div>
+<p>Right and left identity laws for <code>m</code> give us</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="dt">SelectT</span> op <span class="op">&gt;&gt;=</span> <span class="fu">pure</span> <span class="ot">=</span> <span class="dt">SelectT</span> <span class="op">$</span> \bmr <span class="ot">-&gt;</span> <span class="kw">do</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> op bmr</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pure</span> y</span></code></pre></div>
+<p>and then</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="dt">SelectT</span> op <span class="op">&gt;&gt;=</span> <span class="fu">pure</span> <span class="ot">=</span> <span class="dt">SelectT</span> <span class="op">$</span> \bmr <span class="ot">-&gt;</span> op bmr <span class="ot">=</span> <span class="dt">Select</span> op</span></code></pre></div>
+<p>and the law is proven.</p>
+<h4 id="final-boss-associativity-law">Final boss, associativity law</h4>
+<p><code>m &gt;&gt;= (\x -&gt; k x &gt;&gt;= h) = (m &gt;&gt;= k) &gt;&gt;= h</code></p>
+<p>Stay tuned!</p>
+
+        </div>
+        <div id="footer">
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>
