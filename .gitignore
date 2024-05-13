@@ -19,4 +19,5 @@ cabal.sandbox.config
 .stack-work/
 _cache/
 _site/
-docs/css/syntax.css
+docs/
+
