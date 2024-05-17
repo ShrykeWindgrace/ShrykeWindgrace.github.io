@@ -1,7 +1,7 @@
 ---
 title: SelectT monad transformer and its laws
 author: me
-date: 2024-05-13
+date: 2024-05-17
 tags: Haskell
 mathjax: off
 ---
@@ -77,7 +77,7 @@ And the first law is proven.
 
 #### Second law
 
-Just a little more difficult, but easy nonetheless. We use the second for the inner functor `m` and the associativity of function commposition.
+Just a little more difficult, but easy nonetheless. We use the second law for the inner functor `m` and the associativity of function composition.
 
 ```haskell
 fmap bc ( fmap ab (SelectT op)) = fmap bc ( SelectT $ \bmr -> ab <$> op (bmr . ab) )
@@ -141,8 +141,10 @@ SelectT op >>= pure = SelectT $ \bmr -> do
     y <- op (pick >=> bmr)
     pick y
 ```
-We plug in the definition of `pure`
-`runSelectT (pure x) bmr = runSelectT (SelectT $ \_ -> pure x) bmr = pure x`
+We plug in the definition of `pure`: 
+```haskell
+runSelectT (pure x) bmr = runSelectT (SelectT $ \_ -> pure x) bmr = pure x
+```
 to obtain
 ```haskell
 SelectT op >>= pure = SelectT $ \bmr -> do
@@ -173,3 +175,168 @@ and the law is proven.
 `m >>= (\x -> k x >>= h) = (m >>= k) >>= h`
 
 Stay tuned!
+
+In order to simplify notations, let's introduce an operator 
+```haskell
+[] :: SelectT m r a -> (a -> m r) -> m a
+```
+It overrides Haskell's syntax for lists, but we do not use lists anywhere in this post, so this should be fine.
+
+We can write the monad instance as
+```haskell
+m >>= f = SelectT $ \bmr -> do
+    let pick x = [f x] bmr
+    y <- [m] ((>>= bmr) . pick)
+    pick y
+```
+
+With that in mind, we write
+```haskell
+m >>= (\x -> k x >>= h) = SelectT $ \cmr -> do
+    let p1 = \a -> [k a >>= h] cmr -- :: a -> m c
+    y <- [m] ((>>= cmr) . p1)
+    p1 y
+```
+
+After that we plug in the definition of `[k a >>= h]`:
+```haskell
+m >>= (\x -> k x >>= h) = SelectT $ \cmr -> do
+    let p1 = \a ->
+        [SelectT $ \zmr -> let p2 b = [h b] zmr in
+            ([k a] ((>>= zmr) . p2)) >>= p2] cmr
+    y <- [m] ((>>= cmr) . p1)
+    p1 y
+```
+Since `[]` in our notation is just unwrapping the `SelectT` constructor, we simplify as
+```haskell
+m >>= (\x -> k x >>= h) = SelectT $ \cmr -> do
+    let p1 = \a ->
+        let p2 = \b -> [h b] cmr in
+            ([k a] ((>>= cmr) . p2)) >>= p2
+    y <- [m] ((>>= cmr) . p1)
+    p1 y
+```
+
+Let's keep `p2` there for now and inline only `p1`:
+```haskell
+p1 = \a -> ([k a] ((>>= cmr) . p2)) >>= p2
+```
+
+
+```haskell
+m >>= (\x -> k x >>= h) = SelectT $ \cmr -> do
+    let p2 = \b -> [h b] cmr
+    y <- [m] ((>>= cmr) . (\a -> ([k a] ((>>= cmr) . p2)) >>= p2) )
+    ([k y] ((>>= cmr) . p2))) >>= p2
+```
+
+Rewrite the definition of `y`:
+
+```haskell
+m >>= (\x -> k x >>= h) = SelectT $ \cmr -> do
+    let p2 = \b -> [h b] cmr
+    y <- [m] ( \a -> (([k a] ((>>= cmr) . p2)) >>= p2) >>= cmr)
+    ([k y] ((>>= cmr) . p2))) >>= p2
+```
+
+One could notice the parts of the third monad for the underlying monad in the expression `((...) >>= p2) >>= cmr`,
+we definitely should use that.
+
+```haskell
+m >>= (\x -> k x >>= h) = SelectT $ \cmr -> do
+    let p2 = \b -> [h b] cmr
+    y <- [m] ( \a -> (([k a] ((>>= cmr) . p2)) >>= (\x -> p2 x >>= cmr ) ))
+    ([k y] ((>>= cmr) . p2))) >>= p2
+```
+or
+```haskell
+m >>= (\x -> k x >>= h) = SelectT $ \cmr -> do
+    let p2 = \b -> [h b] cmr
+    y <- [m] ( \a -> (([k a] ((>>= cmr) . p2)) >>= (\x -> p2 x >>= cmr ) ))
+    z <- [k y] ( (>>= cmr) . p2) 
+    p2 z
+```
+or even 
+```haskell
+m >>= (\x -> k x >>= h) = SelectT $ \cmr -> do
+    let p2 = \b -> [h b] cmr
+    y <- [m] ( \a -> ([k a] ((>>= cmr) . p2)) >>= ((>>= cmr ) . p2) )
+    z <- [k y] ( (>>= cmr) . p2) 
+    p2 z
+```
+
+Now, let's write the other part of the law:
+```haskell
+(m >>= k) >>= h = SelectT $ \cmr -> do
+    let p2 = \b -> [h b] cmr
+    z <- [m >>= k] (( >>= cmr) . p2)
+    p2 z
+```
+Plug the definition of `m >>= k`:
+```haskell
+(m >>= k) >>= h = SelectT $ \cmr -> do
+    let p2 = \b -> [h b] cmr
+    z <- [SelectT $ \bmr -> let p1 a = [k a] bmr in
+        ([m] ((>>= bmr) . p1)) >>= p1 ] (( >>= cmr) . p2)
+    p2 z
+```
+
+```haskell
+(m >>= k) >>= h = SelectT $ \cmr -> do
+    let p2 = \b -> [h b] cmr
+    z <- let p1 a = [k a] (( >>= cmr) . p2) in
+        ([m] ((>>= (( >>= cmr) . p2)) . p1)) >>= p1  
+    p2 z
+```
+Scared? I am, too. Anyways,
+```haskell
+(m >>= k) >>= h = SelectT $ \cmr -> do
+    let p2 = \b -> [h b] cmr
+    let p1 a = [k a] (( >>= cmr) . p2)
+    z <- ([m] ((>>= (( >>= cmr) . p2)) . p1)) >>= p1
+    p2 z
+```
+rewrite that dangling `>>= p1`
+```haskell
+(m >>= k) >>= h = SelectT $ \cmr -> do
+    let p2 = \b -> [h b] cmr
+    let p1 a = [k a] (( >>= cmr) . p2)
+    y <- [m] ((>>= (( >>= cmr) . p2)) . p1)
+    z <- p1 y
+    p2 z
+```
+and inline `p1` once:
+```haskell
+(m >>= k) >>= h = SelectT $ \cmr -> do
+    let p2 = \b -> [h b] cmr
+    let p1 a = [k a] (( >>= cmr) . p2)
+    y <- [m] ((>>= (( >>= cmr) . p2)) . p1)
+    z <- [k y] (( >>= cmr) . p2)
+    p2 z
+```
+Getting something already! Now off to inline the last mention of `p1`:
+
+```haskell
+  (>>= (( >>= cmr) . p2)) . p1
+= \a -> p1 a >>= (( >>= cmr) . p2)
+= \a -> ([k a] (( >>= cmr) . p2)) >>= (( >>= cmr) . p2)
+```
+Putting this back:
+```haskell
+(m >>= k) >>= h = SelectT $ \cmr -> do
+    let p2 = \b -> [h b] cmr
+    let p1 a = [k a] (( >>= cmr) . p2)
+    y <- [m] ( \a -> ([k a] (( >>= cmr) . p2)) >>= (( >>= cmr) . p2) )
+    z <- [k y] (( >>= cmr) . p2)
+    p2 z
+```
+
+Recall that we already wrote that once:
+```haskell
+m >>= (\x -> k x >>= h) = SelectT $ \cmr -> do
+    let p2 = \b -> [h b] cmr
+    y <- [m] ( \a -> ([k a] ((>>= cmr) . p2)) >>= ((>>= cmr ) . p2) )
+    z <- [k y] ( (>>= cmr) . p2) 
+    p2 z
+```
+and therefore our arduous work is done, and indeed the third monad law holds for `Select m r`!
