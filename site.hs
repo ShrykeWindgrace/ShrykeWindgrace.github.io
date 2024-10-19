@@ -120,7 +120,7 @@ mathCtx = field "mathjax" $ \item -> do
         Just "off" -> ""
         Just "false" -> ""
         Nothing -> ""
-        _ -> "\n<script type=\"text/javascript\" src=\"http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>"
+        _ -> "\n<script type=\"text/javascript\" src=\"https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>"
 
 localReaderOptions :: ReaderOptions
 localReaderOptions = let defExts = readerExtensions defaultHakyllReaderOptions in defaultHakyllReaderOptions {
