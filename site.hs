@@ -4,7 +4,20 @@ import           Hakyll
 import           Text.Pandoc.Extensions
 import           Text.Pandoc.Highlighting (Style, haddock, styleToCss)
 import           Text.Pandoc.Options
-
+import Text.Pandoc.Definition
+    ( Block(CodeBlock, Para), Inline(Image) )
+import Text.Pandoc.Walk (walkM)
+import qualified Network.URI.Encode as URI (encode)
+import qualified Data.ByteString.Lazy.Char8 as LBS
+import qualified Data.Text as Text
+import Hakyll.Process
+    ( execCompilerWith,
+      execName,
+      newExtension,
+      CompilerOut(COutFile),
+      ExecutableArg(ProcArg),
+      OutFilePath(SpecificPath) )
+import System.IO.Temp ( writeTempFile )
 --------------------------------------------------------------------------------
 main :: IO ()
 main = hakyllWith config $ do
@@ -45,7 +58,7 @@ main = hakyllWith config $ do
 
     match "posts/*" $ do
         route $ setExtension "html"
-        compile $ pandocCompilerWith localReaderOptions (defaultHakyllWriterOptions {writerHTMLMathMethod = MathJax "", writerHighlightStyle = Just pandocCodeStyle })
+        compile $ pandocCompilerWithTransformM localReaderOptions (defaultHakyllWriterOptions {writerHTMLMathMethod = MathJax "", writerHighlightStyle = Just pandocCodeStyle })(walkM tikzFilter)
             >>= loadAndApplyTemplate "templates/post.html"    (postCtxWithTags tags)
             >>= loadAndApplyTemplate "templates/default.html" (mathCtx <> postCtxWithTags tags)
             >>= relativizeUrls
@@ -79,8 +92,7 @@ main = hakyllWith config $ do
                 >>= loadAndApplyTemplate "templates/default.html" (indexCtx <> mathCtx)
                 >>= relativizeUrls
 
-    match "templates/*" $ compile templateCompiler
-
+    match ("templates/*.html" .||. "templates/*.tex")  $ compile templateCompiler
 
 --------------------------------------------------------------------------------
 postCtx :: Context String
@@ -122,3 +134,35 @@ localReaderOptions = let defExts = readerExtensions defaultHakyllReaderOptions i
 
 pandocCodeStyle :: Style
 pandocCodeStyle = haddock
+
+
+-- based on https://taeer.bar-yam.me/blog/posts/hakyll-tikz/
+
+tikzFilter :: Block -> Compiler Block
+tikzFilter (CodeBlock (id_, "tikzpicture":extraClasses, namevals) contents) =
+  (imageBlock . Text.pack . ("data:image/svg+xml;utf8," <>) .  URI.encode . filter (/= '\n') . itemBody <$>) $
+    makeItem (Text.unpack contents)
+     >>= loadAndApplyTemplate (fromFilePath "templates/tikz.tex") (bodyField  "body")
+     >>= withItemBody mkTzCompiler
+  where imageBlock fname = Para [Image (id_, "tikzpicture":extraClasses, namevals) [] (fname, "")]
+tikzFilter x = return x
+
+
+mkTzCompiler :: String -> Compiler String
+mkTzCompiler contents = do
+    baseLoc <- unsafeCompiler $
+        windowize <$> writeTempFile "_latex" ".tex" contents
+
+    debugCompiler $ "temp tex file: " <> baseLoc
+    let svgLoc = newExtension "svg" baseLoc
+
+    made <- execCompilerWith
+        (execName "make")
+        [ProcArg svgLoc] -- what make has to create
+        (COutFile $ SpecificPath svgLoc) -- expected by hakyll
+    pure $ itemBody $ fmap LBS.unpack made
+
+-- | strips leading ".\" and replaces backslashes with slashes
+windowize :: String -> String
+windowize ('.' : '\\' : xs) = windowize xs
+windowize xs = map (\x -> if x == '\\' then '/' else x) xs
