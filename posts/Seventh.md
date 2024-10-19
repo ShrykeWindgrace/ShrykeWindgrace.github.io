@@ -1,15 +1,15 @@
 ---
 title: Area of a particular triangle
 author: me
-date: 2024-10-14
+date: 2024-10-19
 tags: maths, tikz
 mathjax: on
 ---
 
 ## Geometric problem
 
-I first saw this problem back in school when I was 15, so I do not claim the author.
-Given the type of constraints presented in its statement, one could argue that the *generalized* version of this problem is easier to solve.
+I first saw this problem back in school when I was 15, so I do not claim to be the author.
+One could argue that the *generalized* version of this problem is easier to solve.
 
 I used this problem as an excuse to learn new things about `tikz` and `hakyll`.
 
