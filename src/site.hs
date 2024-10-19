@@ -3,7 +3,10 @@
 import           Hakyll
 import           Text.Pandoc.Extensions
 import           Text.Pandoc.Highlighting (Style, haddock, styleToCss)
-import           Text.Pandoc.Options
+import Text.Pandoc.Options
+    ( HTMLMathMethod(MathJax),
+      ReaderOptions(readerExtensions),
+      WriterOptions(writerHighlightStyle, writerHTMLMathMethod) )
 import Text.Pandoc.Definition
     ( Block(CodeBlock, Para), Inline(Image) )
 import Text.Pandoc.Walk (walkM)
@@ -18,6 +21,8 @@ import Hakyll.Process
       ExecutableArg(ProcArg),
       OutFilePath(SpecificPath) )
 import System.IO.Temp ( writeTempFile )
+import Utils
+import Feeds
 --------------------------------------------------------------------------------
 main :: IO ()
 main = hakyllWith config $ do
@@ -60,6 +65,7 @@ main = hakyllWith config $ do
         route $ setExtension "html"
         compile $ pandocCompilerWithTransformM localReaderOptions (defaultHakyllWriterOptions {writerHTMLMathMethod = MathJax "", writerHighlightStyle = Just pandocCodeStyle })(walkM tikzFilter)
             >>= loadAndApplyTemplate "templates/post.html"    (postCtxWithTags tags)
+            >>= saveSnapshot "content"
             >>= loadAndApplyTemplate "templates/default.html" (mathCtx <> postCtxWithTags tags)
             >>= relativizeUrls
 
@@ -94,11 +100,11 @@ main = hakyllWith config $ do
 
     match ("templates/*.html" .||. "templates/*.tex")  $ compile templateCompiler
 
+    atomRule
+    rssRule
+
 --------------------------------------------------------------------------------
-postCtx :: Context String
-postCtx =
-    dateField "date" "%B %e, %Y" `mappend`
-    defaultContext
+
 
 postCtxWithTags :: Tags -> Context String
 postCtxWithTags tags = tagsField "tags" tags `mappend` postCtx
