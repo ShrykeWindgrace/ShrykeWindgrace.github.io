@@ -8,6 +8,7 @@ blog:
 lf:
 	fd -e html -x dos2unix
 	fd -e css -x dos2unix
+	fd -e xml -x dos2unix
 
 build:
 	stack build
