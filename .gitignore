@@ -26,3 +26,6 @@ _latex
 
 # vscode
 .vscode/
+
+# shake cache
+.shake/

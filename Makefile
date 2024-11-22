@@ -20,3 +20,6 @@ _latex/%.svg : _latex/%.pdf
 _latex/%.pdf : _latex/%.tex
 	echo _latex/$*.tex
 	pdflatex -output-directory=_latex _latex/$*.tex
+
+clean:
+	rm -r _latex/*
