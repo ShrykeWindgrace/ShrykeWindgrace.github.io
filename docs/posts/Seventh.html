@@ -112,6 +112,172 @@ g = S - 3a - 3 d = S - 3a - 3 (\alpha S - 2 a) = S - 3 \alpha S + 3 a = S - 3 \a
 \]</span></p>
 <p>A quick sanity check: if <span class="math inline">\(\alpha = 0\)</span>, then <span class="math inline">\(g = S\)</span> (the triangle <span class="math inline">\(UVW\)</span> is equal to the trianlge <span class="math inline">\(ABC\)</span>). Similarly, if <span class="math inline">\(\alpha = \frac 12\)</span>, then the trianlge <span class="math inline">\(UVW\)</span> degenerates to a point (medians have a common point of intesection).</p>
 <p>Finally, the initial problem asked for <span class="math inline">\(\alpha = \frac 13\)</span>. The answer is then <span class="math inline">\(\frac gS = \frac 1 7\)</span>.</p>
+<h3 id="followup-2024-11-22">Followup (2024-11-22)</h3>
+<p>We can further relax the condtions that the ratios are the same:
+let us suppose that</p>
+<p><span class="math display">\[
+\frac{BX}{BC} = \alpha;\quad  \frac {CZ}{CA} = \beta;\quad \frac {AY} {AB} = \gamma.
+\]</span></p>
+<p>We can still write the same system of equations for the triangles <span class="math inline">\(ACY\)</span> and <span class="math inline">\(ZCW\)</span>:</p>
+<p><span class="math display">\[
+\frac{a+c+d}{c} = \frac {AC}{ZC} \cdot \frac{CY}{CW} = \frac 1\beta \cdot \frac{b + e + f + g}{ b + e}
+\]</span>
+or, as we’ve seen before,
+<span class="math display">\[
+\frac{\gamma S}{c} =  \frac 1\beta \cdot \frac{(1-\gamma) S}{\beta S - c},
+\]</span>
+which results in
+<span class="math display">\[
+\beta\gamma(\beta S - c) = (1-\gamma)c
+\]</span>
+and finally
+<span class="math display">\[
+\frac c S = \frac{\beta^2\gamma}{1-\gamma + \beta\gamma}.
+\]</span>
+If we repeat the same reasoning for <span class="math inline">\(b\)</span> we get
+<span class="math display">\[
+\frac{b}{\beta S} = \alpha\frac{\alpha S - b}{(1-\beta)S},
+\]</span>
+which would give us
+<span class="math display">\[
+\frac{b}{S} = \frac{\alpha^2\beta}{1-\beta+\alpha\beta}.
+\]</span>
+In the same spirit
+<span class="math display">\[
+\frac{a}{S} = \frac{\gamma^2\alpha}{1-\alpha+\gamma\alpha}.
+\]</span></p>
+<p>Now to the tedious part:
+<span class="math display">\[\begin{align*}
+\frac d S &amp;= \gamma - \frac cS -\frac aS,\\
+\frac e S &amp;= \beta - \frac bS -\frac cS,\\
+\frac f S &amp;= \alpha - \frac aS -\frac bS,
+\end{align*}\]</span>
+so
+<span class="math display">\[
+\frac gS = 1 - \frac {a + b + c + d + e + g}{S} = 1 -\alpha -\beta-\gamma + \frac{a + b + c}{S}
+\]</span>
+<span class="math display">\[
+= 1 - (\alpha + \beta + \gamma) + \frac{\gamma^2\alpha}{1-\alpha+\gamma\alpha}
++\frac{\alpha^2\beta}{1-\beta+\alpha\beta}
++
+\frac{\beta^2\gamma}{1-\gamma + \beta\gamma}.
+\]</span>
+One can also note that
+<span class="math display">\[
+\frac{\gamma^2\alpha}{1-\alpha+\gamma\alpha} = \gamma- \frac{\gamma (1-\alpha)}{1-\alpha+\gamma\alpha}
+\]</span>
+so we continue
+<span class="math display">\[
+\frac gS = 1
+-\frac{\gamma (1-\alpha)}{1-\alpha+\gamma\alpha}
+-\frac{\alpha (1-\beta)}{1-\beta+\alpha\beta}
+-\frac{\beta (1-\gamma)}{1-\gamma+\beta\gamma}.
+\]</span></p>
+<p>Let <span class="math inline">\(\alpha' = \frac{\alpha}{1-\alpha}\)</span> (and similarly for other variables):
+<span class="math display">\[
+\frac gS = 1
+-\frac{\gamma }{1+\gamma\alpha'}
+-\frac{\alpha }{1+\alpha\beta'}
+-\frac{\beta }{1+\beta\gamma'}.
+\]</span></p>
+<p>Putting everything to common denominator:
+<span class="math display">\[
+\frac gS =  \frac{(1+\gamma\alpha')(1+\alpha\beta')(1+\beta\gamma')
+-\gamma(1+\alpha\beta')(1+\beta\gamma')
+-\alpha(1+\gamma\alpha')(1+\beta\gamma')
+-\beta(1+\gamma\alpha')(1+\alpha\beta') }
+{(1+\gamma\alpha')(1+\alpha\beta')(1+\beta\gamma')}
+\]</span></p>
+<p>Denote
+<span class="math display">\[
+D = (1+\gamma\alpha')(1+\alpha\beta')(1+\beta\gamma')
+\]</span></p>
+<p>to get
+<span class="math display">\[\begin{align*}
+\frac {gD}S &amp;= 1 + \underline{\gamma \alpha'} + \alpha\beta' + \beta\gamma' + \underline{\alpha\gamma\alpha'\beta'} + \alpha\beta\beta'\gamma'+\beta\gamma\alpha'\gamma' + \alpha\beta\gamma\alpha'\beta'\gamma'\\
+&amp;-(\gamma +\alpha\beta'\gamma' + \beta\gamma\gamma' + \alpha\beta\gamma\beta'\gamma')\\
+&amp;-(\alpha +\alpha\beta\gamma' + \underline{\alpha\gamma\alpha'} + \alpha\beta\gamma\alpha'\gamma')\\
+&amp;-(\beta +\alpha'\beta\gamma + \alpha\beta\beta' + \underline{\alpha\beta\gamma\alpha'\beta'})
+\end{align*}\]</span></p>
+<p>Since <span class="math inline">\(x'(1-x) = x\)</span>, the underlined terms simplify (we will implicitly make the same conversion for other combinations later):
+<span class="math display">\[
+{\gamma \alpha'} - {\alpha\gamma\alpha'} = \gamma\alpha'(1-\alpha) = \alpha\gamma\alpha'
+\]</span>
+<span class="math display">\[
+{\alpha\gamma\alpha'\beta'} - \alpha\beta\gamma\alpha'\beta' = \alpha\beta\gamma\alpha'
+\]</span>
+This observation allows us to continue
+<span class="math display">\[\begin{align*}
+\frac {gD}S &amp;= 1 + \gamma \alpha + \alpha\beta + \beta\gamma + \alpha\beta\gamma (\alpha'+\beta'+\gamma')+\alpha\beta\gamma\alpha'\beta'\gamma'\\
+&amp;-(\alpha+\beta+\gamma +\alpha'\beta\gamma+\alpha\beta'\gamma+\alpha\beta\gamma')
+\end{align*}\]</span>
+and
+<span class="math display">\[\begin{align*}
+\frac {gD}S &amp;= 1 + \gamma \alpha + \alpha\beta + \beta\gamma - (\alpha+\beta+\gamma)+\alpha\beta\gamma\alpha'\beta'\gamma'\\
+&amp;+ \alpha'\beta\gamma(\alpha-1)+ \alpha\beta'\gamma(\beta-1)+ \alpha\beta\gamma'(\gamma-1)
+\end{align*}\]</span>
+<span class="math display">\[
+ = 1 + \gamma \alpha + \alpha\beta + \beta\gamma - (\alpha+\beta+\gamma)+\alpha\beta\gamma\alpha'\beta'\gamma'
+- 3\alpha\beta\gamma
+\]</span>
+The final expression the writes
+<span class="math display">\[
+\frac gS =\frac{1 + \gamma \alpha + \alpha\beta + \beta\gamma - (\alpha+\beta+\gamma)+\alpha\beta\gamma\alpha'\beta'\gamma'
+- 3\alpha\beta\gamma}{(1+\gamma\alpha')(1+\alpha\beta')(1+\beta\gamma')
+}
+\]</span>
+(I do not know whether we can get another, more interesting form of this expression).</p>
+<h4 id="sanity-check">Sanity check</h4>
+<p>If <span class="math inline">\(\alpha = \beta = \gamma = \frac 12\)</span>
+we have <span class="math inline">\(\alpha' = \beta' = \gamma' = 1\)</span> and
+<span class="math display">\[
+\frac{g}{S} = \frac{1 + 3/4 - 3/2 + 1/8 - 3/8}{27/8} = 0
+\]</span></p>
+<p>Similarly, if <span class="math inline">\(\alpha = \beta = \gamma = 0\)</span> we get <span class="math inline">\(\alpha' = \beta' = \gamma' = 0\)</span>
+and
+<span class="math display">\[
+\frac{g}{S} = 1
+\]</span></p>
+<p>Finally, if <span class="math inline">\(\alpha = \beta = \gamma = \frac 13\)</span> we have <span class="math inline">\(\alpha' = \beta' = \gamma' = \frac 12\)</span> and
+<span class="math display">\[
+\frac{g}{S} = \frac{1 + 3/9 - 3/3 + 1/8\cdot 1/27 - 3/27}{(7/6)^3} = \frac{6^3}{7^3}\frac{72 + 1 - 24}{6^3} = \frac17
+\]</span></p>
+<p>In a more general sence, we can write for the case <span class="math inline">\(\alpha = \beta = \gamma\)</span>
+<span class="math display">\[
+\frac{g}{S} = \frac{1 + 3 \alpha^2-3\alpha +\alpha^3\left(\frac{\alpha}{1-\alpha}\right)^3
+- 3\alpha^3}{\left(1+\frac{\alpha^2}{1-\alpha}\right)^3}
+\]</span>
+<span class="math display">\[
+ = \frac
+{(1  - 3\alpha + 3 \alpha^2 -\alpha^3 - 2\alpha^3)(1-\alpha)^3 + \alpha^6}
+{\left(1 - \alpha +\alpha^2\right)^3}
+\]</span></p>
+<p><span class="math display">\[
+ = \frac
+{(1-\alpha)^6  - 2\alpha^3(1-\alpha)^3 + \alpha^6}
+{\left(1 - \alpha +\alpha^2\right)^3}
+\]</span></p>
+<p><span class="math display">\[
+ = \frac
+{\left((1-\alpha)^3 -  \alpha^3\right)^2}
+{\left(1 - \alpha +\alpha^2\right)^3}
+\]</span></p>
+<p><span class="math display">\[
+ = \frac
+{\left((1-2\alpha)((1-\alpha)^2 +  \alpha(1-\alpha) + \alpha^2 )\right)^2}
+{\left(1 - \alpha +\alpha^2\right)^3}
+\]</span></p>
+<p><span class="math display">\[
+ = \frac
+{\left((1-2\alpha)(1 - \alpha + \alpha^2)\right)^2}
+{\left(1 - \alpha +\alpha^2\right)^3}
+\]</span></p>
+<p><span class="math display">\[
+ = \frac
+{(1-2\alpha)^2}
+{1 - \alpha +\alpha^2}
+\]</span>
+which confirms our previous result.</p>
 
         </div>
         <div id="footer">
