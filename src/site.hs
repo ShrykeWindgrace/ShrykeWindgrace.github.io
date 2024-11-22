@@ -23,6 +23,11 @@ import Hakyll.Process
 import System.IO.Temp ( writeTempFile )
 import Utils
 import Feeds
+import Control.Monad.State
+import SvgWorks
+import Control.Monad (unless)
+import System.Directory (doesFileExist)
+
 --------------------------------------------------------------------------------
 main :: IO ()
 main = hakyllWith config $ do
@@ -63,7 +68,7 @@ main = hakyllWith config $ do
 
     match "posts/*" $ do
         route $ setExtension "html"
-        compile $ pandocCompilerWithTransformM localReaderOptions (defaultHakyllWriterOptions {writerHTMLMathMethod = MathJax "", writerHighlightStyle = Just pandocCodeStyle })(walkM tikzFilter)
+        compile $ pandocCompilerWithTransformM localReaderOptions (defaultHakyllWriterOptions {writerHTMLMathMethod = MathJax "", writerHighlightStyle = Just pandocCodeStyle }) (\b -> evalStateT (walkM tikzFilter b) 1)
             >>= loadAndApplyTemplate "templates/post.html"    (postCtxWithTags tags)
             >>= saveSnapshot "content"
             >>= loadAndApplyTemplate "templates/default.html" (mathCtx <> postCtxWithTags tags)
@@ -144,13 +149,26 @@ pandocCodeStyle = haddock
 
 -- based on https://taeer.bar-yam.me/blog/posts/hakyll-tikz/
 
-tikzFilter :: Block -> Compiler Block
-tikzFilter (CodeBlock (id_, "tikzpicture":extraClasses, namevals) contents) =
+tikzFilter :: Block -> StateT Int Compiler Block
+tikzFilter b@(CodeBlock (id_, "tikzpicture":extraClasses, namevals) contents) = do
+    cur <- get
+    put $ cur + 1
+    lift $ do
+        fName <- toFilePath <$> getUnderlying
+        debugCompiler $ "saw image " <> show cur <> " for file " <> fName
+        let imageBlock fname = Para [Image (id_, "tikzpicture":extraClasses, namevals) [] (fname, "")] in
+            (imageBlock . Text.pack . ("data:image/svg+xml;utf8," <>) .  URI.encode . filter (/= '\n') . itemBody <$>) $
+            makeItem (Text.unpack contents)
+                >>= loadAndApplyTemplate (fromFilePath "templates/tikz.tex") (bodyField  "body")
+                >>= withItemBody (mkTzCompiler2 fName cur)
+
+{-tikzFilter (CodeBlock (id_, "tikzpicture":extraClasses, namevals) contents) =
   (imageBlock . Text.pack . ("data:image/svg+xml;utf8," <>) .  URI.encode . filter (/= '\n') . itemBody <$>) $
     makeItem (Text.unpack contents)
      >>= loadAndApplyTemplate (fromFilePath "templates/tikz.tex") (bodyField  "body")
      >>= withItemBody mkTzCompiler
   where imageBlock fname = Para [Image (id_, "tikzpicture":extraClasses, namevals) [] (fname, "")]
+-}
 tikzFilter x = return x
 
 
@@ -168,7 +186,29 @@ mkTzCompiler contents = do
         (COutFile $ SpecificPath svgLoc) -- expected by hakyll
     pure $ itemBody $ fmap LBS.unpack made
 
+
+
+mkTzCompiler2 :: FilePath -> Int -> String -> Compiler String
+mkTzCompiler2 source counter contents = do
+    let texName = mkTexName source counter
+    unsafeCompiler $ do
+        exists <- doesFileExist texName
+        if exists
+            then do
+            existing <- readFile texName
+            unless (existing == contents) $ do
+                writeFile texName contents
+            else do
+                writeFile texName contents
+
+    debugCompiler $ "temp tex file: " <> texName
+    svgContents <- unsafeCompiler $ buildSvg texName
+    itemBody . itemSetBody svgContents <$> getResourceString
+    -- loadBody (fromFilePath svgPath)
+
+
 -- | strips leading ".\" and replaces backslashes with slashes
 windowize :: String -> String
 windowize ('.' : '\\' : xs) = windowize xs
 windowize xs = map (\x -> if x == '\\' then '/' else x) xs
+
