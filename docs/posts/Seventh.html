@@ -220,18 +220,40 @@ and
  = 1 + \gamma \alpha + \alpha\beta + \beta\gamma - (\alpha+\beta+\gamma)+\alpha\beta\gamma\alpha'\beta'\gamma'
 - 3\alpha\beta\gamma
 \]</span>
-The final expression the writes
 <span class="math display">\[
-\frac gS =\frac{1 + \gamma \alpha + \alpha\beta + \beta\gamma - (\alpha+\beta+\gamma)+\alpha\beta\gamma\alpha'\beta'\gamma'
-- 3\alpha\beta\gamma}{(1+\gamma\alpha')(1+\alpha\beta')(1+\beta\gamma')
-}
+ = (1- \alpha) (1 -\beta)(1 - \gamma)  - 2 \alpha\beta\gamma +  \alpha\beta\gamma\alpha'\beta'\gamma'
 \]</span>
-(I do not know whether we can get another, more interesting form of this expression).</p>
+<span class="math display">\[
+= (1- \alpha) (1 -\beta)(1 - \gamma)\left(1 - 2 \alpha'\beta'\gamma' +  (\alpha'\beta'\gamma')^2\right)
+\]</span>
+<span class="math display">\[
+= (1- \alpha) (1 -\beta)(1 - \gamma)(1 - \alpha'\beta'\gamma')^2.
+\]</span>
+The denominator can also be simplified to
+<span class="math display">\[
+(1+\gamma\alpha')(1+\alpha\beta')(1+\beta\gamma')
+= (1- \alpha) (1 -\beta)(1 - \gamma)
+\left(\frac{1}{1-\gamma}+\gamma'\alpha'\right)\left(\frac{1}{1-\alpha}+\alpha'\beta'\right)\left(\frac{1}{1-\beta}+\beta'\gamma'\right).
+\]</span>
+Notice that
+<span class="math display">\[
+\frac{1}{1-\alpha} = 1 + \frac{\alpha}{1-\alpha} = 1 + \alpha',
+\]</span>
+hence
+<span class="math display">\[
+D = (1- \alpha) (1 -\beta)(1 - \gamma)
+\left(1+\gamma'+\gamma'\alpha'\right)\left(1+\alpha'+\alpha'\beta'\right)\left(1+\beta'+\beta'\gamma'\right).
+\]</span>
+The final expression then writes
+<span class="math display">\[
+\frac gS =\frac{(1 - \alpha'\beta'\gamma')^2}
+{\left(1+\gamma'+\gamma'\alpha'\right)\left(1+\alpha'+\alpha'\beta'\right)\left(1+\beta'+\beta'\gamma'\right)}
+\]</span></p>
 <h4 id="sanity-check">Sanity check</h4>
 <p>If <span class="math inline">\(\alpha = \beta = \gamma = \frac 12\)</span>
 we have <span class="math inline">\(\alpha' = \beta' = \gamma' = 1\)</span> and
 <span class="math display">\[
-\frac{g}{S} = \frac{1 + 3/4 - 3/2 + 1/8 - 3/8}{27/8} = 0
+\frac{g}{S} = 0
 \]</span></p>
 <p>Similarly, if <span class="math inline">\(\alpha = \beta = \gamma = 0\)</span> we get <span class="math inline">\(\alpha' = \beta' = \gamma' = 0\)</span>
 and
@@ -240,7 +262,7 @@ and
 \]</span></p>
 <p>Finally, if <span class="math inline">\(\alpha = \beta = \gamma = \frac 13\)</span> we have <span class="math inline">\(\alpha' = \beta' = \gamma' = \frac 12\)</span> and
 <span class="math display">\[
-\frac{g}{S} = \frac{1 + 3/9 - 3/3 + 1/8\cdot 1/27 - 3/27}{(7/6)^3} = \frac{6^3}{7^3}\frac{72 + 1 - 24}{6^3} = \frac17
+\frac{g}{S} = \frac{(1 - 1/8)^2}{(7/4)^3} = \frac17
 \]</span></p>
 <p>In a more general sence, we can write for the case <span class="math inline">\(\alpha = \beta = \gamma\)</span>
 <span class="math display">\[

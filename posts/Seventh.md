@@ -307,20 +307,43 @@ $$
  = 1 + \gamma \alpha + \alpha\beta + \beta\gamma - (\alpha+\beta+\gamma)+\alpha\beta\gamma\alpha'\beta'\gamma'
 - 3\alpha\beta\gamma
 $$
-The final expression the writes
 $$
-\frac gS =\frac{1 + \gamma \alpha + \alpha\beta + \beta\gamma - (\alpha+\beta+\gamma)+\alpha\beta\gamma\alpha'\beta'\gamma'
-- 3\alpha\beta\gamma}{(1+\gamma\alpha')(1+\alpha\beta')(1+\beta\gamma')
-}
+ = (1- \alpha) (1 -\beta)(1 - \gamma)  - 2 \alpha\beta\gamma +  \alpha\beta\gamma\alpha'\beta'\gamma'
 $$
-(I do not know whether we can get another, more interesting form of this expression).
+$$
+= (1- \alpha) (1 -\beta)(1 - \gamma)\left(1 - 2 \alpha'\beta'\gamma' +  (\alpha'\beta'\gamma')^2\right)
+$$
+$$
+= (1- \alpha) (1 -\beta)(1 - \gamma)(1 - \alpha'\beta'\gamma')^2.
+$$
+The denominator can also be simplified to
+$$
+(1+\gamma\alpha')(1+\alpha\beta')(1+\beta\gamma')
+= (1- \alpha) (1 -\beta)(1 - \gamma)
+\left(\frac{1}{1-\gamma}+\gamma'\alpha'\right)\left(\frac{1}{1-\alpha}+\alpha'\beta'\right)\left(\frac{1}{1-\beta}+\beta'\gamma'\right).
+$$
+Notice that
+$$
+\frac{1}{1-\alpha} = 1 + \frac{\alpha}{1-\alpha} = 1 + \alpha',
+$$
+hence
+$$
+D = (1- \alpha) (1 -\beta)(1 - \gamma)
+\left(1+\gamma'+\gamma'\alpha'\right)\left(1+\alpha'+\alpha'\beta'\right)\left(1+\beta'+\beta'\gamma'\right).
+$$
+The final expression then  writes
+$$
+\frac gS =\frac{(1 - \alpha'\beta'\gamma')^2}
+{\left(1+\gamma'+\gamma'\alpha'\right)\left(1+\alpha'+\alpha'\beta'\right)\left(1+\beta'+\beta'\gamma'\right)}
+$$
+
 
 
 #### Sanity check
 If $\alpha = \beta = \gamma = \frac 12$
 we have $\alpha' = \beta' = \gamma' = 1$ and 
 $$
-\frac{g}{S} = \frac{1 + 3/4 - 3/2 + 1/8 - 3/8}{27/8} = 0
+\frac{g}{S} = 0
 $$
 
 Similarly, if $\alpha = \beta = \gamma = 0$ we get $\alpha' = \beta' = \gamma' = 0$
@@ -331,7 +354,7 @@ $$
 
 Finally, if $\alpha = \beta = \gamma = \frac 13$ we have $\alpha' = \beta' = \gamma' = \frac 12$ and
 $$
-\frac{g}{S} = \frac{1 + 3/9 - 3/3 + 1/8\cdot 1/27 - 3/27}{(7/6)^3} = \frac{6^3}{7^3}\frac{72 + 1 - 24}{6^3} = \frac17
+\frac{g}{S} = \frac{(1 - 1/8)^2}{(7/4)^3} = \frac17
 $$
 
 In a more general sence, we can write for the case $\alpha = \beta = \gamma$
