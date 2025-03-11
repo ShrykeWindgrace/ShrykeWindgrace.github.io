@@ -13,13 +13,13 @@ import Text.Pandoc.Walk (walkM)
 import qualified Network.URI.Encode as URI (encode)
 import qualified Data.ByteString.Lazy.Char8 as LBS
 import qualified Data.Text as Text
-import Hakyll.Process
+{-import Hakyll.Process
     ( execCompilerWith,
       execName,
       newExtension,
       CompilerOut(COutFile),
       ExecutableArg(ProcArg),
-      OutFilePath(SpecificPath) )
+      OutFilePath(SpecificPath) )-}
 import System.IO.Temp ( writeTempFile )
 import Utils
 import Feeds
@@ -171,7 +171,7 @@ tikzFilter b@(CodeBlock (id_, "tikzpicture":extraClasses, namevals) contents) = 
 -}
 tikzFilter x = return x
 
-
+{-
 mkTzCompiler :: String -> Compiler String
 mkTzCompiler contents = do
     baseLoc <- unsafeCompiler $
@@ -185,7 +185,7 @@ mkTzCompiler contents = do
         [ProcArg svgLoc] -- what make has to create
         (COutFile $ SpecificPath svgLoc) -- expected by hakyll
     pure $ itemBody $ fmap LBS.unpack made
-
+-}
 
 
 mkTzCompiler2 :: FilePath -> Int -> String -> Compiler String

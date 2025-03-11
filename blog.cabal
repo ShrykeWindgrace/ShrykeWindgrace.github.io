@@ -29,7 +29,7 @@ executable blog
                        uri-encode,
                        bytestring,
                        text,
-                       hakyll-process,
+                       --hakyll-process,
                        temporary,
                        mtl,
                        shake,
