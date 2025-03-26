@@ -49,3 +49,4 @@ packages:
 nix:
   enable: true
   packages: [pkg-config, zlib]
+  #pure: false
