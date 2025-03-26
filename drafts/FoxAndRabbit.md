@@ -22,6 +22,25 @@ First, let us draw a picture for a time $t>0$:
     \coordinate (F) at (1,-1);
     %\node [draw, inner sep=5pt, anchor = north, pos = 5] (R) {Ra};
     \draw (F) -- (R); % ...
+
+    % Draw x-axis and y-axis
+    \draw[-stealth, thick] (-5,0) -- (5,0) node[right] {$x$};
+    \draw[-stealth, thick] (0,-5) -- (0,5) node[above] {$y$};
+
+    % Draw ticks on x-axis and y-axis
+    \foreach \x in {-2,-1,...,2}
+        \draw (\x,0.1) -- (\x,-0.1);
+    \foreach \y in {-2,-1,...,2}
+        \draw (0.1,\y) -- (-0.1,\y);
+
+    % Draw grid
+    \foreach \x in {-3,-2,...,3}
+        \draw[dashed] (\x,-3) -- (\x,3);
+    \foreach \y in {-3,-2,...,3}
+        \draw[dashed] (-3,\y) -- (3,\y);
+
+    % Draw origin
+    \filldraw[black] (0,0) circle[radius=1pt];
 ```
 
 Clearly, the rabbit's position, as a function of $t$ is $(t,0)$.
