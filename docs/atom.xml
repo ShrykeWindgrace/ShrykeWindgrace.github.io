@@ -29,7 +29,7 @@
     
 </div>
 <h2 id="motivation">Motivation</h2>
-<p>Last march I stumbled upon a problem in one of math-oriented communities (here’s their <a href="https://sites.google.com/view/ktrtvseros/%D0%B3%D0%BB%D0%B0%D0%B2%D0%BD%D0%B0%D1%8F-%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0">home page</a>):</p>
+<p>Several weeks ago I stumbled upon a problem in one of math-oriented communities (here’s their <a href="https://sites.google.com/view/ktrtvseros/%D0%B3%D0%BB%D0%B0%D0%B2%D0%BD%D0%B0%D1%8F-%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0">home page</a>):</p>
 <p>Prove that
 <span class="math display">\[
     \cos \left( {\frac{5\pi }{33}}\right)
@@ -39,7 +39,7 @@
     \cos \left( {\frac{14\pi }{33}}\right)
     =\frac {1}{32}.
 \]</span></p>
-<p>As I found out later, this problem was proposed at a university admission exam, so it should be accessible for a high-schooler; I did not really try to solve it using standard trigonometrics identities (second part of the post is in order, I guess). Initially I wanted to see if there is a generalization of this result, since we alreade have the identities like
+<p>As I found out later, this problem was proposed at a university admission exam, so it should be accessible for a high-schooler; I did not really try to solve it using standard trigonometrics identities (second part of the post is in order, I guess). Initially I wanted to see if there is a generalization of this result, since we already have the identities like
 <span class="math display">\[
 \cos \left( {\frac{\pi }{3}}\right) = \frac 12
 \]</span>
@@ -210,6 +210,95 @@ Finally, <span class="math inline">\(\sin \left( {\frac{32\pi }{33}}\right) = \s
     \cos \left( {\frac{14\pi }{33}}\right)
     =\frac {1}{32}.
 \]</span></p>
+<h2 id="another-method">Another method</h2>
+<p>One could also notice that the coefficients <span class="math inline">\([5,7,10,13,14]\)</span> are stable under multiplication by <span class="math inline">\(2\)</span> in the following sense:
+<span class="math display">\[
+    \cos \left( {\frac{5\pi }{33}}\right)
+    \cos \left( {\frac{7\pi }{33}}\right)
+    \cos \left( {\frac{10\pi }{33}}\right)
+    \cos \left( {\frac{13\pi }{33}}\right)
+    \cos \left( {\frac{14\pi }{33}}\right)
+\]</span>
+<span class="math display">\[
+= \frac{\sin\left( {\frac{5\pi }{33}}\right)\cos \left( {\frac{5\pi }{33}}\right)
+    \cos \left( {\frac{7\pi }{33}}\right)
+    \cos \left( {\frac{10\pi }{33}}\right)
+    \cos \left( {\frac{13\pi }{33}}\right)
+    \cos \left( {\frac{14\pi }{33}}\right)}{\sin\left( {\frac{5\pi }{33}}\right)}
+\]</span>
+<span class="math display">\[
+= \frac{\sin\left( {\frac{10\pi }{33}}\right)
+    \cos \left( {\frac{7\pi }{33}}\right)
+    \cos \left( {\frac{10\pi }{33}}\right)
+    \cos \left( {\frac{13\pi }{33}}\right)
+    \cos \left( {\frac{14\pi }{33}}\right)}{2\sin\left( {\frac{5\pi }{33}}\right)}
+\]</span>
+<span class="math display">\[
+= \frac{\sin\left( {\frac{20\pi }{33}}\right)
+    \cos \left( {\frac{7\pi }{33}}\right)
+    \cos \left( {\frac{13\pi }{33}}\right)
+    \cos \left( {\frac{14\pi }{33}}\right)}{4\sin\left( {\frac{5\pi }{33}}\right)}
+\]</span>
+<span class="math display">\[
+= -\frac{\sin\left( {\frac{13\pi }{33}}\right)
+    \cos \left( {\frac{7\pi }{33}}\right)
+    \cos \left( {\frac{13\pi }{33}}\right)
+    \cos \left( {\frac{14\pi }{33}}\right)}{4\sin\left( {\frac{5\pi }{33}}\right)}
+\]</span>
+<span class="math display">\[
+= -\frac{\sin\left( {\frac{26\pi }{33}}\right)
+    \cos \left( {\frac{7\pi }{33}}\right)
+    \cos \left( {\frac{14\pi }{33}}\right)}{8\sin\left( {\frac{5\pi }{33}}\right)}
+\]</span>
+<span class="math display">\[
+= \frac{\sin\left( {\frac{7\pi }{33}}\right)
+    \cos \left( {\frac{7\pi }{33}}\right)
+    \cos \left( {\frac{14\pi }{33}}\right)}{8\sin\left( {\frac{5\pi }{33}}\right)}
+\]</span>
+<span class="math display">\[
+= \frac{\sin\left( {\frac{14\pi }{33}}\right)
+    \cos \left( {\frac{14\pi }{33}}\right)}{16\sin\left( {\frac{5\pi }{33}}\right)}
+\]</span>
+<span class="math display">\[
+= \frac{\sin\left( {\frac{28\pi }{33}}\right) }
+{32\sin\left( {\frac{5\pi }{33}}\right)}
+\]</span>
+<span class="math display">\[
+= \frac{\sin\left( {\frac{5\pi }{33}}\right) }
+{32\sin\left( {\frac{5\pi }{33}}\right)} = \frac {1} {32}.
+\]</span>
+I’d wager a guess that this was the intended solution.</p>
+<h2 id="corollaries">Corollaries</h2>
+<p>The above techniques allow for the following generalization:</p>
+<p><span class="math display">\[
+\forall n\ge 1 ,\exists m \ge 0, \exists I \subset [0,\ldots,n],\,I\ne \emptyset \quad \prod_{k\in I}\cos\left(\frac{k\pi}{2n+1}\right) = \frac{1}{2^m}.
+\]</span>
+For example, one can show that
+<span class="math display">\[\begin{align*}
+    2^{-18}=\, &amp;\,
+    \cos \left( {\frac{3\pi }{65}}\right)
+    \cos \left( {\frac{6\pi }{65}}\right)
+    \cos \left( {\frac{7\pi }{65}}\right)
+    \cos \left( {\frac{9\pi }{65}}\right)
+    \cos \left( {\frac{11\pi }{65}}\right)
+    \\&amp;\times
+    \cos \left( {\frac{12\pi }{65}}\right)
+    \cos \left( {\frac{14\pi }{65}}\right)
+    \cos \left( {\frac{17\pi }{65}}\right)
+    \cos \left( {\frac{18\pi }{65}}\right)
+    \cos \left( {\frac{19\pi }{65}}\right)
+    \\&amp;\times
+    \cos \left( {\frac{21\pi }{65}}\right)
+    \cos \left( {\frac{22\pi }{65}}\right)
+    \cos \left( {\frac{23\pi }{65}}\right)
+    \cos \left( {\frac{24\pi }{65}}\right)
+    \cos \left( {\frac{27\pi }{65}}\right)
+    \\&amp;\times
+    \cos \left( {\frac{28\pi }{65}}\right)
+    \cos \left( {\frac{29\pi }{65}}\right)
+    \cos \left( {\frac{31\pi }{65}}\right),
+\end{align*}\]</span></p>
+<p>Good luck proving that using standard trigonometric identities!</p>
 ]]></summary>
 </entry>
 <entry>

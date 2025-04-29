@@ -193,3 +193,98 @@ $$
     \cos \left( {\frac{14\pi }{33}}\right)
     =\frac {1}{32}.
 $$
+
+## Another method
+
+One could also notice that the coefficients $[5,7,10,13,14]$ are stable under multiplication by $2$ in the following sense:
+$$
+    \cos \left( {\frac{5\pi }{33}}\right)
+    \cos \left( {\frac{7\pi }{33}}\right)
+    \cos \left( {\frac{10\pi }{33}}\right)
+    \cos \left( {\frac{13\pi }{33}}\right)
+    \cos \left( {\frac{14\pi }{33}}\right)
+$$
+$$
+= \frac{\sin\left( {\frac{5\pi }{33}}\right)\cos \left( {\frac{5\pi }{33}}\right)
+    \cos \left( {\frac{7\pi }{33}}\right)
+    \cos \left( {\frac{10\pi }{33}}\right)
+    \cos \left( {\frac{13\pi }{33}}\right)
+    \cos \left( {\frac{14\pi }{33}}\right)}{\sin\left( {\frac{5\pi }{33}}\right)}
+$$
+$$
+= \frac{\sin\left( {\frac{10\pi }{33}}\right)
+    \cos \left( {\frac{7\pi }{33}}\right)
+    \cos \left( {\frac{10\pi }{33}}\right)
+    \cos \left( {\frac{13\pi }{33}}\right)
+    \cos \left( {\frac{14\pi }{33}}\right)}{2\sin\left( {\frac{5\pi }{33}}\right)}
+$$
+$$
+= \frac{\sin\left( {\frac{20\pi }{33}}\right)
+    \cos \left( {\frac{7\pi }{33}}\right)
+    \cos \left( {\frac{13\pi }{33}}\right)
+    \cos \left( {\frac{14\pi }{33}}\right)}{4\sin\left( {\frac{5\pi }{33}}\right)}
+$$
+$$
+= -\frac{\sin\left( {\frac{13\pi }{33}}\right)
+    \cos \left( {\frac{7\pi }{33}}\right)
+    \cos \left( {\frac{13\pi }{33}}\right)
+    \cos \left( {\frac{14\pi }{33}}\right)}{4\sin\left( {\frac{5\pi }{33}}\right)}
+$$
+$$
+= -\frac{\sin\left( {\frac{26\pi }{33}}\right)
+    \cos \left( {\frac{7\pi }{33}}\right)
+    \cos \left( {\frac{14\pi }{33}}\right)}{8\sin\left( {\frac{5\pi }{33}}\right)}
+$$
+$$
+= \frac{\sin\left( {\frac{7\pi }{33}}\right)
+    \cos \left( {\frac{7\pi }{33}}\right)
+    \cos \left( {\frac{14\pi }{33}}\right)}{8\sin\left( {\frac{5\pi }{33}}\right)}
+$$
+$$
+= \frac{\sin\left( {\frac{14\pi }{33}}\right)
+    \cos \left( {\frac{14\pi }{33}}\right)}{16\sin\left( {\frac{5\pi }{33}}\right)}
+$$
+$$
+= \frac{\sin\left( {\frac{28\pi }{33}}\right) }
+{32\sin\left( {\frac{5\pi }{33}}\right)}
+$$
+$$
+= \frac{\sin\left( {\frac{5\pi }{33}}\right) }
+{32\sin\left( {\frac{5\pi }{33}}\right)} = \frac {1} {32}.
+$$
+I'd wager a guess that this was the intended solution.
+
+## Corollaries
+
+The above techniques allow for the following generalization:
+
+$$
+\forall n\ge 1 ,\exists m \ge 0, \exists I \subset [0,\ldots,n],\,I\ne \emptyset: \quad \prod_{k\in I}\cos\left(\frac{k\pi}{2n+1}\right) = \frac{1}{2^m}.
+$$
+For example, one can show that
+\begin{align*}
+    2^{-18}=\, &\,
+    \cos \left( {\frac{3\pi }{65}}\right)
+    \cos \left( {\frac{6\pi }{65}}\right)
+    \cos \left( {\frac{7\pi }{65}}\right)
+    \cos \left( {\frac{9\pi }{65}}\right)
+    \cos \left( {\frac{11\pi }{65}}\right)
+    \\&\times
+    \cos \left( {\frac{12\pi }{65}}\right)
+    \cos \left( {\frac{14\pi }{65}}\right)
+    \cos \left( {\frac{17\pi }{65}}\right)
+    \cos \left( {\frac{18\pi }{65}}\right)
+    \cos \left( {\frac{19\pi }{65}}\right)
+    \\&\times
+    \cos \left( {\frac{21\pi }{65}}\right)
+    \cos \left( {\frac{22\pi }{65}}\right)
+    \cos \left( {\frac{23\pi }{65}}\right)
+    \cos \left( {\frac{24\pi }{65}}\right)
+    \cos \left( {\frac{27\pi }{65}}\right)
+    \\&\times
+    \cos \left( {\frac{28\pi }{65}}\right)
+    \cos \left( {\frac{29\pi }{65}}\right)
+    \cos \left( {\frac{31\pi }{65}}\right),
+\end{align*}
+
+Good luck proving that using standard trigonometric identities!
