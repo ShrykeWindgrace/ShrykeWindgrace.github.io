@@ -2,6 +2,7 @@
 title: A remarkable identity on cosines
 author: me
 date: 2025-04-25
+updated: 2025-04-29
 tags: maths
 mathjax: on
 ---

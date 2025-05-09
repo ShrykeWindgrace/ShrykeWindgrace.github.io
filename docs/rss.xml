@@ -7,12 +7,12 @@
         <description><![CDATA[Ramblings of a mathematician turned programmer]]></description>
         <atom:link href="shrykewindgrace.github.io/rss.xml" rel="self"
                    type="application/rss+xml" />
-        <lastBuildDate>Fri, 25 Apr 2025 00:00:00 UT</lastBuildDate>
+        <lastBuildDate>April 29, 2025</lastBuildDate>
         <item>
     <title>A remarkable identity on cosines</title>
     <link>shrykewindgrace.github.io/posts/Cosine33.html</link>
     <description><![CDATA[<div class="info">
-    Posted on April 25, 2025
+    Posted on April 25, 2025, updated on April 29, 2025
     
         by me
     
@@ -265,7 +265,7 @@ I’d wager a guess that this was the intended solution.</p>
 <h2 id="corollaries">Corollaries</h2>
 <p>The above techniques allow for the following generalization:</p>
 <p><span class="math display">\[
-\forall n\ge 1 ,\exists m \ge 0, \exists I \subset [0,\ldots,n],\,I\ne \emptyset \quad \prod_{k\in I}\cos\left(\frac{k\pi}{2n+1}\right) = \frac{1}{2^m}.
+\forall n\ge 1 ,\exists m \ge 0, \exists I \subset [0,\ldots,n],\,I\ne \emptyset: \quad \prod_{k\in I}\cos\left(\frac{k\pi}{2n+1}\right) = \frac{1}{2^m}.
 \]</span>
 For example, one can show that
 <span class="math display">\[\begin{align*}
