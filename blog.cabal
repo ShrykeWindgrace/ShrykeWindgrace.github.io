@@ -33,7 +33,10 @@ executable blog
                        temporary,
                        mtl,
                        shake,
-                       directory
+                       directory,
+                       time,
+                       time-locale-compat,
+                       filepath
 
   ghc-options:         -Wall
                        -Wcompat
