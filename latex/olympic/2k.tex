@@ -1,0 +1,141 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{amsmath}
+\begin{document}
+\[
+\begin{pmatrix}
+1&0&0&0&0\\
+0&1&0&0&0\\
+0&0&1&0&0\\
+0&-1&1&0&1\\
+0&0&0&0&1
+\end{pmatrix}
+\begin{pmatrix}
+1&0&0&0&0\\
+0&1&0&0&0\\
+0&0&1&0&0\\
+0&0&0&1&0\\
+1&1&-1&0&0
+\end{pmatrix}
+=
+\begin{pmatrix}
+ 1&0&0&0&0\\
+ 0&1&0&0&0\\
+ 0&0&1&0&0\\
+ 1&0&0&0&0\\
+ 1&1&-1&0&0   
+\end{pmatrix}
+\]
+then
+\[
+\begin{pmatrix}
+1&0&0&0&0\\
+0&1&0&0&0\\
+0&0&1&0&0\\
+0&0&0&1&0\\
+1&-1&0&1&0
+\end{pmatrix}
+\begin{pmatrix}
+ 1&0&0&0&0\\
+ 0&1&0&0&0\\
+ 0&0&1&0&0\\
+ 1&0&0&0&0\\
+ 1&1&-1&0&0   
+\end{pmatrix}
+=
+\begin{pmatrix}
+1&0&0&0&0\\
+0&1&0&0&0\\
+0&0&1&0&0\\
+1&0&0&0&0\\
+2&-1&0&0&0
+\end{pmatrix}
+\]
+and
+\[
+\begin{pmatrix}
+ 1&0&0&0&0\\
+ 0&1&0&0&0\\
+ -1&1&0&0&1\\
+ 0&0&0&1&0\\
+ 0&0&0&0&1   
+\end{pmatrix}
+\begin{pmatrix}
+1&0&0&0&0\\
+0&1&0&0&0\\
+0&0&1&0&0\\
+1&0&0&0&0\\
+2&-1&0&0&0
+\end{pmatrix}
+=
+\begin{pmatrix}
+ 1&0&0&0&0\\
+ 0&1&0&0&0\\
+ 1&0&0&0&0\\
+ 1&0&0&0&0\\
+ 2&-1&0&0&0 
+\end{pmatrix}
+\]
+and the last two steps:
+\[
+\begin{pmatrix}
+1&0&0&0&0\\
+0&1&0&0&0\\
+0&0&1&0&0\\
+0&0&0&1&0\\
+1&0&1&-1&0
+\end{pmatrix}
+\begin{pmatrix}
+ 1&0&0&0&0\\
+ 0&1&0&0&0\\
+ 1&0&0&0&0\\
+ 1&0&0&0&0\\
+ 2&-1&0&0&0 
+\end{pmatrix}
+=
+\begin{pmatrix}
+1&0&0&0&0\\
+0&1&0&0&0\\
+1&0&0&0&0\\
+1&0&0&0&0\\
+1&0&0&0&0
+\end{pmatrix}
+\]
+and
+\[
+\begin{pmatrix}
+ 1&0&0&0&0\\
+ 1&0&1&-1&0\\
+ 0&0&1&0&0\\
+ 0&0&0&1&0\\
+ 0&0&0&0&1 
+\end{pmatrix}
+\begin{pmatrix}
+1&0&0&0&0\\
+0&1&0&0&0\\
+1&0&0&0&0\\
+1&0&0&0&0\\
+1&0&0&0&0
+\end{pmatrix}
+=
+\begin{pmatrix}
+1&0&0&0&0\\
+1&0&0&0&0\\
+1&0&0&0&0\\
+1&0&0&0&0\\
+1&0&0&0&0
+\end{pmatrix}
+\]
+
+Another representation of the same sequence of actions would be
+\[
+\begin{matrix}
+    a&b&c&d&e\\
+    a&b&c&d&a+b-c\\
+    a&b&c&a&a+b-c\\
+    a&b&c&a&2a-b\\
+    a&b&a&a&2a-b\\
+    a&b&a&a&a\\
+    a&a&a&a&a
+\end{matrix}
+\]
+\end{document}
