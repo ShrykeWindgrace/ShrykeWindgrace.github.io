@@ -29,3 +29,10 @@ _latex
 
 # shake cache
 .shake/
+
+# latex
+*.fls
+*.log
+*.fdb_latexmk
+*.pdf
+*.synctex.gz
