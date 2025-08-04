@@ -1,0 +1,50 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{amsmath}
+\newcommand\pmt{\pmod {10}}
+\newcommand\pmtt{\pmod {100}}
+\begin{document}
+How many zeros does $9^{999}+1$ end with?
+
+Essentially, we need to find the maximum power of $10$ that divides this number.
+Since $9$ and $10$ are coprime, we can safely factor out terms that are not divisible by $10$ and lose nothing.
+
+First of all
+\[
+9^{999} +1 = (9^{333}+1)(9^{666} - 9 ^{333} + 1).
+\]
+The second factor is not divisible by $10$, because, as $9\equiv-1 \pmt$, we write
+\[
+    9^{666} - 9 ^{333} + 1 \equiv (-1)^{666} - (-1)^{333} + 1 \pmt \equiv 3 \pmt.
+\]
+Therefore, it is sufficient to study $9^{333}+1$.
+Once again
+\[
+9^{333} +1 = (9^{111}+1)(9^{222} - 9 ^{111} + 1),
+\]
+and for exactly the reason as before the second factor is not divisble by $10$, hence we study $9^{111}+1$.
+
+And again
+\[
+9^{111} +1 = (9^{37}+1)(9^{74} - 9 ^{37} + 1),
+\]
+and we reduced the problem to the number $9^{37}+1$.
+Clearly, this nimber is divisible by $10$:
+\[
+    9^{37}+1 \equiv (-1)^{37} + 1 \pmt \equiv 0 \pmt
+\]
+Now let's see whether this number is divisble by $100$; to do so, we study the following remainders:
+\[ 9^2 \equiv 81 \pmtt\]
+\[ 9^4 \equiv 81^2 \pmtt \equiv (6400 + 160 + 1) \pmtt \equiv 61 \pmtt\]
+\[ 9^8 \equiv 61^2 \pmtt \equiv (3600 + 120 + 1) \pmtt \equiv 21 \pmtt\]
+\[ 9^{16} \equiv 21^2 \pmtt \equiv (400 + 40 + 1) \pmtt \equiv 41 \pmtt\]
+\[ 9^{32} \equiv 41^2 \pmtt \equiv (1600 + 80 + 1) \pmtt \equiv 81 \pmtt\]
+Therefore, as $9^{37} = 9^{32} \times 9^4 \times 9$, we get
+\[9^{37} \equiv (9^{32} \times 9^4 \times 9) \pmtt \equiv (81 \times 61 \times 9) \pmtt\]
+\[
+\equiv (41 \times 9) \pmtt \equiv 369 \pmtt \equiv 69 \pmtt
+\]
+And this leaves us with
+\[9^{37}+1 \equiv 70\pmtt,\]
+or, in other words, it is not divisible by $100$.
+We finally conclude that $9^{999}+1$ ends with only \textbf{one} zero.
+\end{document}
