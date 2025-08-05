@@ -1,0 +1,20 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\begin{document}
+
+\[
+p(x) = ax^2 + bx + c, \quad a \ne 0.
+\]
+
+\[
+\frac {p(x+1) + p(x-1)}2 \]
+\[ = \frac {a x^2 + 2 ax + a + bx + b + c + a x^2 - 2ax + a + bx - b + c}{2} \]
+\[= a x^2 + bx + (a + c).
+\]
+После $n$ итераций получим $a x^2 + bx + (na + c)$. Дискриминант равен
+\[
+D = b^2 - 4 a (na +c) = -4na^2 + b^2 - 4 ac.\]
+Поскольку $a\ne0$ и $a^2>0$, при $n > \frac{b^2 - 4 ac}{4a^2}$ дискриминант будет отрицательным, а сам полином не будет иметь корней.
+\end{document}
