@@ -11,7 +11,7 @@ import Text.Pandoc.Definition
     ( Block(CodeBlock, Para), Inline(Image) )
 import Text.Pandoc.Walk (walkM)
 import qualified Network.URI.Encode as URI (encode)
-import qualified Data.ByteString.Lazy.Char8 as LBS
+-- import qualified Data.ByteString.Lazy.Char8 as LBS
 import qualified Data.Text as Text
 {-import Hakyll.Process
     ( execCompilerWith,
@@ -20,7 +20,7 @@ import qualified Data.Text as Text
       CompilerOut(COutFile),
       ExecutableArg(ProcArg),
       OutFilePath(SpecificPath) )-}
-import System.IO.Temp ( writeTempFile )
+-- import System.IO.Temp ( writeTempFile )
 import Utils
 import Feeds
 import Control.Monad.State
@@ -150,7 +150,7 @@ pandocCodeStyle = haddock
 -- based on https://taeer.bar-yam.me/blog/posts/hakyll-tikz/
 
 tikzFilter :: Block -> StateT Int Compiler Block
-tikzFilter b@(CodeBlock (id_, "tikzpicture":extraClasses, namevals) contents) = do
+tikzFilter (CodeBlock (id_, "tikzpicture":extraClasses, namevals) contents) = do
     cur <- get
     put $ cur + 1
     lift $ do
