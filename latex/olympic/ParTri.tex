@@ -1,0 +1,92 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage{pgfplots}
+
+\pgfplotsset{compat=1.18}
+
+\usetikzlibrary{arrows}
+\usetikzlibrary{angles}
+
+\pagestyle{empty}
+
+\begin{document}
+
+\definecolor{wewdxt}{rgb}{0.43137254901960786,0.42745098039215684,0.45098039215686275}
+
+\begin{tikzpicture}[line cap=round,line join=round,>=triangle 45,x=1cm,y=1cm]
+
+\coordinate (A) at (0,0);
+\coordinate (B) at (6.732050807568878,4.464101615137755);
+\coordinate (C) at (11.47213595499958,0);
+\coordinate (M) at (3,2);
+\coordinate (N) at (7,0);
+\coordinate (M1) at (3.124515496597099,0);
+\coordinate (N1) at (1.8305222394830631,1.2203481596553754);
+
+\clip(-2.74,-0.74) rectangle (19.86,7.18);
+\draw [line width=1pt] (A) -- (B) -- (C) -- cycle;
+\draw [line width=1pt] (M) -- (N);
+\draw [line width=1pt] (M) -- (M1);
+\draw [line width=1pt] (N) -- (N1);
+\draw [line width=1pt] (N1)-- (M1);
+
+\pic[draw, angle radius=9pt] {angle=A--M--M1};
+\pic[draw, angle radius=8pt] {angle=M1--M--N};
+
+\pic[draw, angle radius=15pt] {angle=M--N--N1};
+\pic[draw, angle radius=17pt] {angle=M--N--N1};
+\pic[draw, angle radius=18pt] {angle=N1--N--A};
+\pic[draw, angle radius=16pt] {angle=N1--N--A};
+
+
+\begin{scriptsize}
+
+\draw [fill=wewdxt] (A) circle (2.5pt);
+
+\draw[color=wewdxt] (0.16,0.43) node {$A$};
+
+\draw [fill=wewdxt] (M) circle (2.5pt);
+
+\draw[color=wewdxt] (3.16,2.43) node {$M$};
+
+\draw [fill=wewdxt] (N) circle (2.5pt);
+
+\draw[color=wewdxt] (7.16,0.43) node {$N$};
+
+\draw[color=black] (4.92,1.25) node {$d$};
+
+\draw[color=black] (4.84,3.65) node {$d$};
+
+\draw[color=black] (9,-0.35) node {$d$};
+
+\draw [fill=wewdxt] (C) circle (2.5pt);
+
+\draw[color=wewdxt] (11.64,0.43) node {$C$};
+
+\draw [fill=wewdxt] (M1) circle (2.5pt);
+
+\draw[color=wewdxt] (3.38,-0.35) node {$M_1$};
+
+\draw [fill=wewdxt] (N1) circle (2.5pt);
+
+\draw[color=wewdxt] (2,1.65) node {$N_1$};
+
+\draw [fill=wewdxt] (B) circle (2.5pt);
+
+\draw[color=wewdxt] (6.9,4.89) node {$B$};
+
+\draw[color=black] (4.9,-0.35) node {$q$};
+
+\draw[color=black] (1.8,-0.35) node {$p$};
+
+\draw[color=black] (2.5,1.85) node {$t$};
+
+\draw[color=black] (1,1) node {$s$};
+
+
+\end{scriptsize}
+
+
+\end{tikzpicture}
+
+\end{document}
