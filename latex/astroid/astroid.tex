@@ -1,0 +1,51 @@
+\documentclass[12pt, a4paper]{article}
+\begin{document}
+\noindent
+Instead of solving the problem "What is the longest segment that passes the intersection" we will solve an equivalent problem "What is the shortest segment with ends on the walls that touches the point $(a,b)$".
+
+
+Such a segment would have its ends on $(0,p)$ and $(q,0)$.
+The problem essntially boils down to the choice of parametrization of the positon of this segment.
+
+Let us pick the parameter $t=\frac pq$, $t\in(0,\infty)$ and reqrite $p$ and $q$ in terms of $a$, $b$, and $t$.
+Clearly,
+\[
+p = at + b,\quad q = a + \frac bt
+\]
+(refer to the illustration, we have a couple of similar triangles to justify this claim).
+
+After that, the squared length of the segment is
+\[
+L^2 = a^2t^2 + 2abt + b^2 + a^2 +b^2/t^2 + 2 ab/t.
+\]
+Obviously, $L(t)$ is a $C^\infty$ function on $(0,+\infty)$, with
+\[
+\lim_{t\to 0} L(t) = \lim_{t\to\infty} L(t) =\infty.
+\]
+Therefore, we need to find the zeros of the derivative:
+\[
+2L(t)L'(t) = 2 a^2t + 2ab - 2 b^2/t^3 - 2 ab/t^2 = 0.
+\]
+Let us group the terms:
+\[
+0 = a(at+b) - b (at + b)/t^3,
+\]
+which immediately gives us
+\[ t^3 = \frac ba.\]
+With that, we can find $L^2$:
+
+\[
+L^2 = a^2b^{2/3}a^{-2/3} + 2abb^{1/3}a^{-1/3} + a^2 + b^2 + 2abb^{-1/3}a^{1/3} + a^2b^{-2/3}a^{2/3}
+\]
+
+\[
+= a^2 + 3 a^{4/3}b^{2/3} + 3 a ^{2/3}b^{4/3} + b^2 = \left(a^{2/3}+b^{2/3}\right)^3.
+\]
+One could also write $L^2$ as 
+\[L^2 = p^2 + p^2/t^2,\]
+giving the derivative
+\[2LL' = 2pp' + 2pp'/t^2 - 2 p^2/t^3 = 0,\]
+which, after division by $2p$, multiplication by $t^3$, and substituting $p' = a$, gives
+\[0 = at^3 + at - p = at^3-b.\]
+The same final expression, but obtained in a slightly easier way.
+\end{document}
