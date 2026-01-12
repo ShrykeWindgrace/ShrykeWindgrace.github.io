@@ -76,27 +76,23 @@ After that, the recurrent relation becomes
 \[f(x+1) = 2f(x) - f (x-1) + 2,\]
 and its terms are (starting with $x=-1$) are
 \[2, 1, 2, 5, 10, 17,\ldots\]
-If we seek the generic solution as $f(x) = t^x$, we get the characteristic equation
+
+Let us now take $g(x) = f(x) - f(x-1)$, $g(0) = z - m = -1$ and rewrite
+\[g(x+1) = g(x) + 2\]
+with an evident solution
 \[
-t^3 - 2t^2 + t - 2 = 0
+g (x) = g(0) + 2x = 2 x - 1.
 \]
-with solutions
-\[t=2,t=\pm i. \]
-We need to find the coefficients $a,b,c$ such that
-\[a + b + c = m = 2,\quad 2a +ib-ic = z = 1, \quad 4 a - b - c = p = 2.\]
-The first and the third equations give $a = \frac 45$, which allows us to write
-\[ b + c = \frac 65, b - c = \frac 35 i, \]
-or
-$b = \frac 35 + \frac 3{10}i$, $c = \frac 35 - \frac 3{10}i$.
-
-Finally,
-\[f(x) = \frac 45 2^{x+1} + \left(\frac 35 + \frac 3{10}i\right) i^{x+1} + \left(\frac 35 - \frac 3{10}i\right)(-i)^{x+1}.\]
-
-Plugging $x=45$ results in
-\[f(45) = \frac 45 2^{46} - \left(\frac 35 + \frac 3{10}i\right) - \left(\frac 35 - \frac 3{10}i\right)
+Now we can write
+\[
+f(t) - f(t-1) = g(t) = 2 t - 1
 \]
-\[ = \frac 45 2^{46} - frac 65 = \frac {2^{48} - 6}{5}.\]
+and sum over $t$:
+\[
+f(x) - f(0) = \sum_{t=1}^x (f(t) - f(t-1)) = \sum_{t=1}^x (2 t - 1) = x^2.
+\]
+Finally, $f(x) = f(0) + x^2 = 1 + x^2$.
 
-A quick sanity check - the last digit of $2^{48} = 16 ^{12}$ is indeed $6$ and hence $2^{48} - 6 $ is divisible by $5$.
+Among other things, $f(45) = 2026$.
 
 \end{document}
