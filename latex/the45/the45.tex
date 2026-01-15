@@ -6,43 +6,43 @@
 
 \section*{Problem Statement}
 
-Let $f : \mathbb{Z} : \mathbb{Z}$ such that
-\[
-\forall x,y\in \mathbb Z:\quad f(xy-1) + f(x+y) = f(x)f(y)+2.
-\]
+Let $f : \mathbb{Z} \to \mathbb{Z}$ such that
+\begin{equation}
+\forall x,y\in \mathbb Z:\quad f(xy-1) + f(x+y) = f(x)f(y)+2. \label{eq:initial}
+\end{equation}
 Find $f(45)$.
 \section*{Solution}
-
 Whenever we see identities involding sums and products of function argument,
 it is useful to start with values like $0$ and $\pm1$.
 Here, if we denote $z = f(0)$, $m = f(-1)$, and $p=f(1)$, we can write (take $y=1$)
-\[
-f(x-1) + f(x+1) = p f(x) + 2;\]
+\begin{equation}
+f(x-1) + f(x+1) = p f(x) + 2. \label{eq:recurrent:p}
+\end{equation}
 This recurrent formula will the basis of further analysis.
 
 On the other hand, let us take $y=0$; this results in
 \[
-m + f(x) = zf(x) + 2.
+m + f(x) = z f(x) + 2.
 \]
 In particular, for $x=0$ we get
-\[
-m + z = z^2 + 2
-\]
+\begin{equation}
+m + z = z^2 + 2 \label{eq:mz}
+\end{equation}
 and for $x=-1$ we get
-\[2m=mz+2.\]
+\[2m=m z + 2.\]
 The latter equation, rewritten as $m(2-z) = 2$, andmits only four integer solutions:
 $(m=2, z=1)$, $(m=-2, z=3)$, $(m=1, z=0)$, and $(m=-1, z=4)$.
-Only the first one satisfies the equation $m+z=z^2+2$ (todo: label instead rewrite).
+Only the first one satisfies the equation \eqref{eq:mz}.
 
 Now, if we manage to find $p$, any value of $f$ can be found.
 In order to do so, we will take a positive integer number with two different decompositions into a sum of two positive numbers.
-Obviously, $4$ is smallest such number: $4 = 1+3=2+2$, so we write
+Obviously, $4$ is the smallest such number: $4 = 1+3=2+2$, so we write
 \[f(2\cdot2-1)+f(2+2) = f^2(2)+2,\quad f(1\cdot3-1)+f(1+3)=pf(3)+2.\]
 In other words
 \[
 f(4) = f^2(2) + 2 - f(3) = pf(3)+2-f(2).
 \]
-On the other hand, thanks to our recurrence relation,
+On the other hand, thanks to our recurrence relation \eqref{eq:recurrent:p},
 \[f(2) = p^2 +2 - z = p^2+1,\quad f(3) = pf(2)+ 2 - p = p^3+2.\]
 Substituting these into the previous equation, we obtain
 \[
@@ -50,13 +50,13 @@ p^4+2p^2+1 +2- p^3-2 = p^4 + 2p +2 - p^2 -1,
 \]
 or
 \[
-p^3 - 3p^2 + 2p   = 0.
+p^3 - 3p^2 + 2p = 0.
 \]
 This equation has three solutions, $p=0,1,2$ (we, of course hoped for a single integer solution).
-Let's write also \[f(4) = p^4 + 2p + 2 - p^2 -1 = p^4 - p^2 + 2p +1.\]
+Let us write also \[f(4) = p^4 + 2p + 2 - p^2 -1 = p^4 - p^2 + 2p +1.\]
 
 
-Let us study $5 = 2+3 = 1+4$:
+Now we study $5 = 2+3 = 1+4$:
 \[f(2\cdot 3 - 1) + f (2+3) = f(2) f(3)+2,\quad f(1\cdot4-1)+f(1+4)=pf(4)+2.\]
 or
 \[
@@ -73,11 +73,14 @@ As we already know, the candidates for $p$ are $0,1,2$.
 Clearly, only $p=2$ satisfies the equation.
 
 After that, the recurrent relation becomes
-\[f(x+1) = 2f(x) - f (x-1) + 2,\]
+\begin{equation}
+f(x+1) - 2f(x) + f (x-1) = 2, \label{eq:recurrent:2}
+\end{equation}
 and its terms are (starting with $x=-1$) are
 \[2, 1, 2, 5, 10, 17,\ldots\]
-
-Let us now take $g(x) = f(x) - f(x-1)$, $g(0) = z - m = -1$ and rewrite
+One can notice that on the left hand side we have a second order discrete derivative,
+so we immediately say that $f(x) = x^2 + bx + c$ for some constants $b$ and $c$.
+But even without this observation, we can take $g(x) = f(x) - f(x-1)$, $g(0) = z - m = -1$ and rewrite
 \[g(x+1) = g(x) + 2\]
 with an evident solution
 \[
@@ -92,7 +95,12 @@ and sum over $t$:
 f(x) - f(0) = \sum_{t=1}^x (f(t) - f(t-1)) = \sum_{t=1}^x (2 t - 1) = x^2.
 \]
 Finally, $f(x) = f(0) + x^2 = 1 + x^2$.
+Since this is solution of the recurrence relation \eqref{eq:recurrent:2} and not of the initial identity \eqref{eq:initial}, we need to check that indeed
+\[
+(xy-1)^2+1 + (x+y)^2+1 = (1+x^2)(1+y^2) + 2,
+\]
+which is quite straightforward to verify.
 
-Among other things, $f(45) = 2026$.
+At last, we arrive to $f(45) = 2026$. Happy New Year!
 
 \end{document}
