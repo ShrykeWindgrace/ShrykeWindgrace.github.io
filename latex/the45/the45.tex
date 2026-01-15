@@ -1,7 +1,13 @@
 \documentclass[12pt, a4paper]{article}
 \usepackage{amsmath, amsfonts}
 \usepackage[english]{babel}
-
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue
+}
 \begin{document}
 
 \section*{Problem Statement}
@@ -11,6 +17,9 @@ Let $f : \mathbb{Z} \to \mathbb{Z}$ such that
 \forall x,y\in \mathbb Z:\quad f(xy-1) + f(x+y) = f(x)f(y)+2. \label{eq:initial}
 \end{equation}
 Find $f(45)$.
+
+I saw this problem on \href{https://www.reddit.com/r/PassTimeMath/comments/1q1w2mz/find_f45/}{reddit}.
+
 \section*{Solution}
 Whenever we see identities involding sums and products of function argument,
 it is useful to start with values like $0$ and $\pm1$.
