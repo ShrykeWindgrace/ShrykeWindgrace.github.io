@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>My Hakyll Blog - Задачи математических олимпиад</title>
+        <link rel="stylesheet" type="text/css" href="../css/default.css" /><link rel="stylesheet" href="../css/syntax.css" />
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <link rel="alternate" type="application/rss+xml" href="rss.xml">
+        <link rel="alternate" type="application/atom+xml" href="atom.xml">
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">Static blog</a>
+            </div>
+            <div id="navigation">
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../contact.html">Contact</a>
+                <a href="../archive.html">Archive</a>
+            </div>
+        </div>
+
+        <div id="content">
+            <h1>Задачи математических олимпиад</h1>
+
+            <div class="info">
+    Posted on August 21, 2025, updated on March 24, 2026
+    
+        by me
+    
+</div>
+<div class="info">
+    
+    Tags: <a title="All pages tagged 'maths'." href="../tags/maths.html" rel="tag">maths</a>, <a title="All pages tagged 'ru'." href="../tags/ru.html" rel="tag">ru</a>
+    
+</div>
+<blockquote>
+Сколькими нулями заканчивается число <span class="math inline">\(9^{999}+1\)</span>.
+</blockquote>
+<p>Само число вычислять смысла нет, а надо как-то избавляться от большого показателя степени и использовать соотношение <span class="math inline">\(9 \equiv -1 \pmod {10}\)</span>.
+Второе наблюдение - если число заканчивается на <span class="math inline">\(p\)</span> нулей, то это то же самое, что и делимость на <span class="math inline">\(10^p\)</span>.</p>
+<details>
+<summary>
+Решение через разложение на множители
+</summary>
+<p>Основная идея - использовать алгебраическое соотношение вида
+<span class="math display">\[
+x^{2n+1} + 1 = (x + 1) \sum_{k=0}^{2n}(-1)^k x^{2n-k}.
+\]</span></p>
+<p>В нашем случае это даст
+<span class="math display">\[
+9^{999} + 1 = 10\cdot\sum_{k=0}^{998}(-1)^k 9^{998-k}.
+\]</span>
+Первый ноль на конце уже проявился (первый сомножитель), осталось посмотреть, даст ли какие-то нули второй сомножитель.
+<span class="math display">\[
+\sum_{k=0}^{998}(-1)^k 9^{998-k} \equiv \sum_{k=0}^{998}(-1)^k (-1)^{998-k} \equiv \sum_{k=0}^{998} (-1)^{998} \pmod {10}
+\]</span>
+<span class="math display">\[
+\equiv 999 \equiv 9 \pmod {10},
+\]</span>
+то есть это число на <span class="math inline">\(10\)</span> не делится.</p>
+<p>Итоговый ответ - <span class="math inline">\(9^{999} + 1\)</span> заканчивается ровно на один ноль.</p>
+Это решение прямым образом обобщается на любой показатель степени <span class="math inline">\(9^{2n+1}+1\)</span>.
+</details>
+<details>
+<summary>
+Решение через чётность
+</summary>
+<p>Число заканчивается на <span class="math inline">\(p\)</span> нулей - это то же самое, что это число делится на <span class="math inline">\(10^p\)</span>,
+а это уже равнозначно тому, что это число делится одновременно на <span class="math inline">\(2^p\)</span> и <span class="math inline">\(5^p\)</span>.
+Проверять делимость на <span class="math inline">\(2^p\)</span> проще, с неё и начнём.</p>
+<p>Очевидным образом число <span class="math inline">\(9^{999}+1\)</span> чётно - нечётное число в любой степени нечётно, а сумма двух нечётных чётна.
+Давайте проверим делимость на <span class="math inline">\(4\)</span>:</p>
+<p><span class="math display">\[
+9 \equiv 1 \pmod 4,
+\]</span>
+поэтому
+<span class="math display">\[
+9^{999} \equiv 1^{999} \equiv 1 \pmod 4
+\]</span>
+и
+<span class="math display">\[
+9^{999} + 1  \equiv 2 \pmod 4,
+\]</span>
+то есть <span class="math inline">\(9^{999} + 1\)</span> на <span class="math inline">\(4\)</span> не делится.
+Из это сразу следует, что на конце этого большого числа не более одного нуля.</p>
+<p>С другой стороны
+<span class="math display">\[
+9 \equiv -1 \pmod {10},
+\]</span>
+поэтому
+<span class="math display">\[
+9^{999} \equiv (-1)^{999} \equiv -1 \pmod {10}
+\]</span>
+и
+<span class="math display">\[
+9^{999} + 1  \equiv 0 \pmod {10},
+\]</span>
+то есть это число заканчивается ровно на один ноль.</p>
+Очевидным образом это решение можно обобщить на любое число вида <span class="math inline">\(9^n+1\)</span> и заключить,
+что при чётных <span class="math inline">\(n\)</span> нулей на конце не будет, а при нечётных - будет ровно один.
+</details>
+<details>
+<summary>
+Решение через понижение показателя степени
+</summary>
+<p>Основная идея - использовать алгебраические соотношения вида <span class="math inline">\(x^3 + 1 = (x + 1) (x^2 - x + 1)\)</span>; поскольку <span class="math inline">\(999\)</span> кратно <span class="math inline">\(27\)</span>,
+мы сможем довольно сильно понизить показатель степени.</p>
+<p>Для начала
+<span class="math display">\[
+9^{999} +1 = (9^{333}+1)(9^{666} - 9 ^{333} + 1),
+\]</span>
+при этом второй сомножитель не делится ни на <span class="math inline">\(2\)</span>, ни на <span class="math inline">\(5\)</span>; достаточно заметить что <span class="math inline">\(9\equiv-1 \pmod {10}\)</span> и
+<span class="math display">\[
+    9^{666} - 9 ^{333} + 1 \equiv (-1)^{666} - (-1)^{333} + 1 \equiv 3 \pmod {10}.
+\]</span>
+Благодаря этому наблюдению мы знаем, что деление на этот сомножитель не меняет количество нулей на конце. Иными словами, это число взаимно просто с <span class="math inline">\(10\)</span>.</p>
+<p>Теперь изучим <span class="math inline">\(9^{333}+1\)</span>; для этого числа применяем тот же метод
+<span class="math display">\[
+9^{333} +1 = (9^{111}+1)(9^{222} - 9 ^{111} + 1),
+\]</span>
+Второй сомножитель
+<span class="math display">\[
+    9^{333} - 9 ^{222} + 1 \equiv (-1)^{333} - (-1)^{222} + 1 \equiv -1 \pmod {10}.
+\]</span></p>
+<p>Снова второй сомножитель взаимно прост с <span class="math inline">\(10\)</span> и на него безопасно разделить; переходим к <span class="math inline">\(9^{111}+1\)</span>:</p>
+<p><span class="math display">\[
+9^{111} +1 = (9^{37}+1)(9^{74} - 9 ^{37} + 1),
+\]</span>
+Второй сомножитель опять взаимно прост с <span class="math inline">\(10\)</span>; осталось понять, как ведёт себя <span class="math inline">\(9^{37}+1\)</span>.
+Очевидно, это число кратно <span class="math inline">\(10\)</span>:
+<span class="math display">\[
+    9^{37}+1 \equiv (-1)^{37} + 1 \equiv 0 \pmod {10}
+\]</span></p>
+<p>Делится ли это число на <span class="math inline">\(100\)</span>? Рассмотрим остатки от деления на <span class="math inline">\(100\)</span>:
+<span class="math display">\[ 9^2 \equiv 81 \pmod{100}\]</span>
+<span class="math display">\[ 9^4 \equiv 81^2 \pmod{100} \equiv (6400 + 160 + 1) \equiv 61 \pmod{100}\]</span>
+<span class="math display">\[ 9^8 \equiv 61^2 \pmod{100} \equiv (3600 + 120 + 1)  \equiv 21 \pmod{100}\]</span>
+<span class="math display">\[ 9^{16} \equiv 21^2 \pmod{100} \equiv (400 + 40 + 1)  \equiv 41 \pmod{100}\]</span>
+<span class="math display">\[ 9^{32} \equiv 41^2 \pmod{100} \equiv (1600 + 80 + 1)  \equiv 81 \pmod{100}\]</span>
+В конечном итоге <span class="math inline">\(9^{37} = 9^{32} \times 9^4 \times 9\)</span>, и
+<span class="math display">\[9^{37} \equiv (9^{32} \times 9^4 \times 9) \equiv (81 \times 61 \times 9) \pmod{100}\]</span>
+<span class="math display">\[
+\equiv (41 \times 9) \pmod{100} \equiv 369 \equiv 69 \pmod{100}
+\]</span>
+Следовательно
+<span class="math display">\[9^{37}+1 \equiv 70\pmod{100},\]</span>
+иными словами, это число не делится на <span class="math inline">\(100\)</span>.
+Итог - <span class="math inline">\(9^{999}+1\)</span> заканчивается ровно на один ноль.</p>
+<p>Заметим, что это подход по существу использует показатель степени <span class="math inline">\(999 = 27\cdot37\)</span> и требует отдельного анализа сомножителя <span class="math inline">\(9^{37}+1\)</span>.
+Обобщения на любой нечётный показатель не сработают.</p>
+</details>
+<details>
+<summary>
+Решение через изучение цифр
+</summary>
+<p>Это решение основано на наблюдениях за поведением последних цифр разных степеней числа <span class="math inline">\(9\)</span>.
+Первое очевидное наблюдение - если два числа заканчиваются на <span class="math inline">\(1\)</span>, то их произведение тоже будет заканчиваться на <span class="math inline">\(1\)</span>:
+<span class="math display">\[
+(10a +1)\cdot(10b+1) = 10\cdot (10 ab + a + b) + 1.
+\]</span>
+Перепишем:
+<span class="math display">\[
+9^{999} + 1 = 9\cdot81^{499}+1
+\]</span>
+Последняя цифра числа <span class="math inline">\(81^{499}\)</span> будет единицей, значит последняя цифра числа <span class="math inline">\(9\cdot81^{499}\)</span> будет девяткой, а у <span class="math inline">\(9\cdot81^{499}+1\)</span> последняя цифра ноль.
+Иными словами, как минимум один ноль на конце будет.</p>
+<p>Пусть этих нулей как минимум два, тогда для какого-то <span class="math inline">\(a&gt;0\)</span>
+<span class="math display">\[
+9^{999}+1 = 100a +100
+\]</span>
+и
+<span class="math display">\[
+9^{999} = 100 a + 99.
+\]</span>
+Очевидно <span class="math inline">\(a\)</span> кратно <span class="math inline">\(9\)</span>: <span class="math inline">\(a = 9b\)</span>, снова перепишем
+<span class="math display">\[
+9^{998} = 81^{499} = 100 b + 11.
+\]</span>
+Теперь надо понять, может ли число <span class="math inline">\(81^{499}\)</span> заканчиваться на <span class="math inline">\(11\)</span>? Если выписать степени этого числа (<span class="math inline">\(81\)</span>, <span class="math inline">\(6561\)</span>, <span class="math inline">\(531441\)</span> и т.д.), то можно заметить, что число десятков всегда чётно. Попробуем это доказать. Пусть два числа имеют чётное число десятков и заканчиваются на единицу: <span class="math inline">\(20p+1\)</span> и <span class="math inline">\(20q+1\)</span>; их произведение
+<span class="math display">\[(20p+1)\cdot (20q+1) = 20 \cdot(20 p q + p + q) + 1,\]</span>
+то есть тоже заканчивается на единицу и тоже имеет чётное количество десятков.</p>
+<p>Из этого следует, что <span class="math inline">\(81^{499}\)</span> не может заканчиваться на <span class="math inline">\(11\)</span>, а <span class="math inline">\(9^{999}\)</span> не может заканчиваться на <span class="math inline">\(99\)</span>.</p>
+<p>Следовательно, <span class="math inline">\(9^{999} + 1\)</span> заканчивается ровно на один ноль.</p>
+</details>
+<details>
+<summary>
+Решение через бином Ньютона
+</summary>
+<p>Заметим, что
+<span class="math display">\[
+9^{999} + 1 = (10-1)^{999} + 1 = \sum_{k=0}^{999} C_{999}^k 10^{999-k}(-1)^k + 1,
+\]</span>
+где биномиальные коэффициенты имеют вид <span class="math inline">\(C_n^k = \frac{n!}{(n-k)!k!}\)</span>.</p>
+<p>Рассмотрим несколько последних слагаемых этой суммы:
+<span class="math display">\[
+\sum_{k=0}^{999} C_n^k 10^{999-k}(-1)^k + 1
+\]</span>
+<span class="math display">\[= \sum_{k=0}^{997} C_{999}^k 10^{999-k}(-1)^k + C_{999}^{998} 10^{999-998} (-1)^{998} + C_{999}^{999} 10^{999-999} (-1)^{999} + 1
+\]</span>
+и, поскольку <span class="math inline">\(C_n^n = 1\)</span> и <span class="math inline">\(C_n^{n-1}=n\)</span>,
+<span class="math display">\[
+= \sum_{k=0}^{997} C_{999}^k 10^{999-k}(-1)^k + 9990 - 1  + 1 = \sum_{k=0}^{997} C_{999}^k 10^{999-k}(-1)^k + 9990.
+\]</span></p>
+Степени десятки под знаком суммы все не меньше двух; иными словами, <span class="math inline">\(\sum_{k=0}^{997} C_{999}^k 10^{999-k}(-1)^k\)</span> делится на <span class="math inline">\(100\)</span>. А <span class="math inline">\(9990\)</span> делится только на <span class="math inline">\(10\)</span>, поэтому и вся общая сумма делится только на <span class="math inline">\(10\)</span> (или, что эквивалентно, заканчивается только на один ноль).
+</details>
+
+        </div>
+        <div id="footer">
+            <!-- SVG icon for RSS and Atom feeds from fontawesome -->
+            <!-- copied and adapted from https://fontawesome.com/icons/rss?s=solid -->
+            <!-- copied and adapted from  https://fontawesome.com/icons/atom?f=classic&s=solid -->
+            <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <a href="rss.xml"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="feedIcon"><path d="M0 64C0 46.3 14.3 32 32 32c229.8 0 416 186.2 416 416c0 17.7-14.3 32-32 32s-32-14.3-32-32C384 253.6 226.4 96 32 96C14.3 96 0 81.7 0 64zM0 416a64 64 0 1 1 128 0A64 64 0 1 1 0 416zM32 160c159.1 0 288 128.9 288 288c0 17.7-14.3 32-32 32s-32-14.3-32-32c0-123.7-100.3-224-224-224c-17.7 0-32-14.3-32-32s14.3-32 32-32z"></path></svg></a>          
+            <a href="atom.xml"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="feedIcon"><path d="M256 398.8c-11.8 5.1-23.4 9.7-34.9 13.5c16.7 33.8 31 35.7 34.9 35.7s18.1-1.9 34.9-35.7c-11.4-3.9-23.1-8.4-34.9-13.5zM446 256c33 45.2 44.3 90.9 23.6 128c-20.2 36.3-62.5 49.3-115.2 43.2c-22 52.1-55.6 84.8-98.4 84.8s-76.4-32.7-98.4-84.8c-52.7 6.1-95-6.8-115.2-43.2C21.7 346.9 33 301.2 66 256c-33-45.2-44.3-90.9-23.6-128c20.2-36.3 62.5-49.3 115.2-43.2C179.6 32.7 213.2 0 256 0s76.4 32.7 98.4 84.8c52.7-6.1 95 6.8 115.2 43.2c20.7 37.1 9.4 82.8-23.6 128zm-65.8 67.4c-1.7 14.2-3.9 28-6.7 41.2c31.8 1.4 38.6-8.7 40.2-11.7c2.3-4.2 7-17.9-11.9-48.1c-6.8 6.3-14 12.5-21.6 18.6zm-6.7-175.9c2.8 13.1 5 26.9 6.7 41.2c7.6 6.1 14.8 12.3 21.6 18.6c18.9-30.2 14.2-44 11.9-48.1c-1.6-2.9-8.4-13-40.2-11.7zM290.9 99.7C274.1 65.9 259.9 64 256 64s-18.1 1.9-34.9 35.7c11.4 3.9 23.1 8.4 34.9 13.5c11.8-5.1 23.4-9.7 34.9-13.5zm-159 88.9c1.7-14.3 3.9-28 6.7-41.2c-31.8-1.4-38.6 8.7-40.2 11.7c-2.3 4.2-7 17.9 11.9 48.1c6.8-6.3 14-12.5 21.6-18.6zM110.2 304.8C91.4 335 96 348.7 98.3 352.9c1.6 2.9 8.4 13 40.2 11.7c-2.8-13.1-5-26.9-6.7-41.2c-7.6-6.1-14.8-12.3-21.6-18.6zM336 256a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zm-80-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"></path></svg></a>
+            Generated with <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </div>
+    </body>
+</html>
